@@ -142,7 +142,14 @@ export async function activate() {
       throw new Error("Node.js not installed on your $PATH");
     }
 
-    await dependencyManagement.installWrappedDependencies(disposable);
+    await dependencyManagement.installWrappedDependencies(disposable, {
+      console: {
+        log: (...args: any[]) => debug(...args),
+        info: (...args: any[]) => debug(...args),
+        warn: (...args: any[]) => console.warn(...args),
+        error: (...args: any[]) => console.error(...args),
+      },
+    });
 
     const serverPath = nova.path.join(
       dependencyManagement.getDependencyDirectory(),
