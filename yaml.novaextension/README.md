@@ -11,7 +11,7 @@ Let's get started!
 **Yaml Extension** provides deeper integration with **YAML** (YAML Ain't Markup Language), including linting yaml documents
 and validating against known JSON schemas, including Kubernetes resources.
 
-<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/preview.png" width="800" alt="Yaml Extension adds deeper YAML integration to Nova based on JSON schemas">
+<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/preview.gif" width="800" alt="Yaml Extension adds deeper YAML integration to Nova based on JSON schemas">
 
 ## Requirements
 
