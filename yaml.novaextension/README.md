@@ -94,7 +94,7 @@ For example:
 
 <img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/on-hover.png" width="800" alt="Get tooltips when writting YAML files based on the associated JSON schema">
 
-<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/validation.png" width="800" alt="See completion options as you write based on the JSON schema">
+<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/completion.png" width="800" alt="See completion options as you write based on the JSON schema">
 
 ## Install
 
