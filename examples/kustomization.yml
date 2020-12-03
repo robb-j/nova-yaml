@@ -1,0 +1,23 @@
+#
+# This file tests an Kustomize file, using a known json schema
+#
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dev
+
+resources:
+  - deployment.yml
+  - service.yml
+  - ingress.yml
+  - pvc.yml
+
+secretGenerator:
+  - name: something
+    literals:
+      - KEY=value
+
+configMapGenerator:
+  - name: somthing
+    files: []

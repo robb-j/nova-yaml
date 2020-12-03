@@ -1,0 +1,8 @@
+#
+# This file tests that yaml-language-server doesn't break non-associated files
+#
+
+hello: world
+my:
+  name:
+    is: methos

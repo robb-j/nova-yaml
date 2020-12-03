@@ -1,0 +1,28 @@
+#
+# This file tests an Kubernetes deployment as a suffix file
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-deployment
+spec:
+  selector:
+    matchLabels:
+      app: sample-deployment
+  template:
+    metadata:
+      labels:
+        app: sample-deployment
+    spec:
+      containers:
+        - name: sample-deployment
+          image: nginx:1-alpine
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: html
+
+      volumes:
+        - name: html
+          persistentVolumeClaim:
+            claimName: sample-pvc

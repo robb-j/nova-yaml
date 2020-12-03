@@ -1,0 +1,45 @@
+{
+  "name": "nova-yaml-language-server",
+  "version": "0.0.0",
+  "description": "YAML language server for Nova",
+  "repository": "robb-j/nova-yaml-language-server",
+  "author": "Rob Anderson (https://r0b.io)",
+  "license": "MIT",
+  "keywords": [],
+  "dependencies": {
+    "nova-extension-utils": "^1.3.0",
+    "nova-npm-executable": "^0.1.1",
+    "yaml-language-server": "^0.13.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^16.0.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "@types/jest": "^26.0.15",
+    "@types/nova-editor-node": "^2.0.0",
+    "@types/whatwg-fetch": "0.0.33",
+    "@vercel/ncc": "^0.25.1",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.2",
+    "magic-string": "^0.25.7",
+    "onchange": "^7.1.0",
+    "prettier": "^2.1.2",
+    "rollup": "^2.33.3",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.0.5",
+    "yorkie": "^2.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "onchange -i 'src/**' 'rollup.*.js' -- npm run build",
+    "test": "jest"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json,css,md}": [
+      "prettier --write"
+    ]
+  }
+}

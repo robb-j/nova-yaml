@@ -1,0 +1,14 @@
+#
+# This file tests an Kubernetes persistent volume claim
+#
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sample-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

@@ -1,0 +1,16 @@
+#
+# This file tests an Kubernetes service
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-service
+spec:
+  selector:
+    app: some-deployment
+  ports:
+    - port: 80
+      name: http
+      targetPort: 80
+  type: NodePort
