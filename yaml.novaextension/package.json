@@ -1,7 +1,6 @@
 {
   "name": "yaml.novaextension",
-  "private": "true",
-  "version": "1.0.0",
+  "private": true,
   "dependencies": {
     "yaml-language-server": "^0.13.0"
   },

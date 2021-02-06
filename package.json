@@ -1,6 +1,6 @@
 {
   "name": "nova-yaml-language-server",
-  "version": "0.0.0",
+  "private": true,
   "description": "YAML language server for Nova",
   "repository": "robb-j/nova-yaml-language-server",
   "author": "Rob Anderson (https://r0b.io)",

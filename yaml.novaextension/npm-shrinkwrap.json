@@ -1,6 +1,5 @@
 {
   "name": "yaml.novaextension",
-  "version": "1.0.0",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
