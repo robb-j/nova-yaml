@@ -200,7 +200,7 @@ export async function activate() {
       k8sFiles.push(`**/*${keyword}.yaml`);
     }
 
-    // Settings to confiure the yaml language server
+    // Settings to configure the yaml language server
     const settings = {
       yaml: {
         format: {
