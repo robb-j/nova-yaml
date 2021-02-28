@@ -242,26 +242,31 @@ export async function activate() {
     client.sendNotification("workspace/didChangeConfiguration", { settings });
 
     //
-    // These requests below don't work, it seems Nova is only exposing known/implemented requests
+    // The message below don't work, it seems Nova is only exposing known/implemented requests
     //
+
+    // const schemas = await fetchSchemaAssociations()
+    // client.sendNotification('json/schemaAssociations', schemas)
 
     // Tell the server that we are ready to provide custom schema content
     // client.sendNotification("yaml/registerCustomSchemaRequest");
 
+    // Tell the server that the client supports schema requests sent directly to it
+    // client.sendNotification("yaml/registerContentRequest");
+
     // If the server asks for custom schemas, get it and send it back
     // client.onRequest("custom/schema/request", (resource: string) => {
     //   debug("custom/schema/request resource:", resource);
-    //   return [];
+    //   throw new Error("Not implemented");
     // });
 
     // If the server asks for custom schema content, get it and send it back
     // client.onRequest("custom/schema/content", (uri: string) => {
-    //   debug("custom/schema/request resource:", uri);
-    //   return null;
+    //   debug("custom/schema/content resource:", uri);
+    //   throw new Error("Not implemented");
     // });
 
     // Handle http requests for the server
-    // client.sendNotification("yaml/registerVSCodeContentRequest");
     // client.onRequest("vscode/content", async (uri: string) => {
     //   debug("vscode/content uri:", uri);
     //   throw new Error("Not implemented");
