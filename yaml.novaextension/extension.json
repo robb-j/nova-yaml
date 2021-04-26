@@ -30,5 +30,51 @@
         "title": "Reset Yaml Install Lock"
       }
     ]
-  }
+  },
+
+  "config": [
+    {
+      "key": "yaml.format.enable",
+      "title": "Format",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to format YAML documents or not"
+    },
+    {
+      "key": "yaml.validate",
+      "title": "Validate",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to validate YAML documents or not"
+    },
+    {
+      "key": "yaml.hover",
+      "title": "Hover",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to show on-hover toolips"
+    },
+    {
+      "key": "yaml.completion",
+      "title": "Completions",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether suggest completions"
+    },
+    {
+      "key": "yaml.customTags",
+      "title": "Custom tags",
+      "type": "stringArray",
+      "description": "A global set of custom tags that the parser will validate against, e.g. \"!secret scalar\".\n\nSee \"Custom tags\" in the readme for more."
+    }
+  ],
+
+  "configWorkspace": [
+    {
+      "key": "yaml.customTags",
+      "title": "Custom tags",
+      "type": "stringArray",
+      "description": "A set of custom tags that the parser will validate against, e.g. \"!secret scalar\".\n\nSee \"Custom tags\" in the readme for more."
+    }
+  ]
 }
