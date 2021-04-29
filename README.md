@@ -78,6 +78,12 @@ Error: Cannot find module '../utils/objects'
 - handle promise rejections from the server to work around LSP dynamic capability limitations
 - move large screenshots out of extension folder
 - add more configuration options and add per-project config too
+- it seems nova doesn't initally send configuration to the language server
+  but it does try to differentially send config when it is edited in the preference panes.
+- it seems nova doesn't deconstruct do-notation keys into nested objects beyond the initially `yaml`.
+  so changes to `yaml.format.enabled` send a `{'format.enabled': true}`,
+  rather than `{format:{enabled:true}}` object.
+  - I worked this out by `--inspect`-ing the server and watching notification payloads.
 
 ## bugs
 
