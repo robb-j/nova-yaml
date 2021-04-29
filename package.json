@@ -9,7 +9,7 @@
   "dependencies": {
     "nova-extension-utils": "^1.4.0",
     "nova-npm-executable": "^0.1.1",
-    "yaml-language-server": "^0.13.0"
+    "yaml-language-server": "^0.18.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",

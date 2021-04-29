@@ -2,7 +2,7 @@
   "name": "yaml.novaextension",
   "private": true,
   "dependencies": {
-    "yaml-language-server": "^0.15.0"
+    "yaml-language-server": "^0.18.0"
   },
   "scripts": {}
 }
