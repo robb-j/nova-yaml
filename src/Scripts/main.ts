@@ -151,6 +151,12 @@ export async function activate() {
       },
     });
 
+    // Uncomment to try compilled code
+    // const serverPath = nova.path.join(
+    //   nova.extension.path,
+    //   "Scripts/yaml-server.dist.js"
+    // );
+
     const serverPath = nova.path.join(
       dependencyManagement.getDependencyDirectory(),
       "node_modules/yaml-language-server/out/server/src/server.js"
