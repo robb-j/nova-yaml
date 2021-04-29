@@ -1,9 +1,9 @@
 //
-// Extension entrypoint
+// Extension entry point
 //
 
 import { dependencyManagement } from "nova-extension-utils";
-import { execute, readJson, writeJson } from "./utils";
+import { execute } from "./utils";
 
 // Toggle on in development to --inspect the language server
 const DEBUG_INSPECT = false;
@@ -38,73 +38,6 @@ async function reload() {
   await activate();
 }
 
-interface SchemaStoreCatalog {
-  schemas: Array<{
-    name: string;
-    description: string;
-    fileMatch: string[];
-    url: string;
-  }>;
-}
-
-/**
- * Not in use.
- * Fetch the schema catalog using fetch and cache it into extension storage
- */
-async function fetchAndCacheSchemaCatalog(
-  noCache = false
-): Promise<SchemaStoreCatalog> {
-  const cachePath = nova.path.join(
-    nova.extension.globalStoragePath,
-    "catalog.json"
-  );
-
-  // If the cached file exists, read, decode and return the cached value
-  // let catalog: SchemaStoreCatalog = undefined;
-  if (!noCache && nova.fs.access(cachePath, nova.fs.F_OK)) {
-    debug("Reading catalog.json from storage");
-    const fromCache = readJson(cachePath);
-    if (fromCache) return fromCache;
-
-    debug("Catalog cache not found or unreadable");
-  }
-
-  // Fetch schemas from the schemastore using the fetch API
-  debug("Fetching catalog.json from schemastore.org");
-  const catalog: SchemaStoreCatalog = await fetch(
-    "https://www.schemastore.org/api/json/catalog.json"
-  ).then((r: any) => r.json());
-
-  // If the cache file exists, remove it now
-  if (nova.fs.access(cachePath, nova.fs.F_OK)) {
-    debug("Removing catalog.json from storage");
-    nova.fs.remove(cachePath);
-  }
-
-  // Cache the network response
-  debug("Caching catalog.json into extension storage");
-  writeJson(cachePath, catalog);
-
-  // Return the catalog
-  return catalog;
-}
-
-/**
- * Not in use. The yaml-language-server does this by default and as a first version of the extension, its simpler to use that for now.
- * It should use the same underlying fetch api under the hood.
- */
-async function fetchSchemaAssociations(): Promise<any> {
-  const catalog = await fetchAndCacheSchemaCatalog();
-
-  const result = catalog.schemas.map((item) => ({
-    uri: item.url,
-    fileMatch: item.fileMatch,
-  }));
-
-  // Return the map of schemas
-  return result;
-}
-
 type ServerOptions = ConstructorParameters<typeof LanguageClient>[2];
 type ClientOptions = ConstructorParameters<typeof LanguageClient>[3];
 
@@ -117,6 +50,42 @@ async function findNodeJsPath(): Promise<string | null> {
     args: ["which", "node"],
   });
   return status === 0 ? stdout.trim() : null;
+}
+
+function generateKubernetesPaths(): string[] {
+  const keywords = [
+    "deployment",
+    "deploy",
+    "configmap",
+    "cm",
+    "namespace",
+    "ns",
+    "persistentvolumeclaim",
+    "pvc",
+    "pod",
+    "po",
+    "secret",
+    "service",
+    "svc",
+    "serviceaccount",
+    "sa",
+    "daemonset",
+    "ds",
+    "cronjob",
+    "cj",
+    "job",
+    "ingress",
+    "ing",
+  ];
+
+  const k8sFiles: string[] = [];
+
+  for (const keyword of keywords) {
+    k8sFiles.push(`**/*${keyword}.yml`);
+    k8sFiles.push(`**/*${keyword}.yaml`);
+  }
+
+  return k8sFiles;
 }
 
 /**
@@ -175,56 +144,12 @@ export async function activate() {
       serverOptions.args!.unshift("--inspect-brk=9231", "--trace-warnings");
     }
 
-    const keywords = [
-      "deployment",
-      "deploy",
-      "configmap",
-      "cm",
-      "namespace",
-      "ns",
-      "persistentvolumeclaim",
-      "pvc",
-      "pod",
-      "po",
-      "secret",
-      "service",
-      "svc",
-      "serviceaccount",
-      "sa",
-      "daemonset",
-      "ds",
-      "cronjob",
-      "cj",
-      "job",
-      "ingress",
-      "ing",
-    ];
-    const k8sFiles: string[] = [];
-
-    for (const keyword of keywords) {
-      k8sFiles.push(`**/*${keyword}.yml`);
-      k8sFiles.push(`**/*${keyword}.yaml`);
-    }
-
-    // Settings to configure the yaml language server
-    const settings = {
-      yaml: {
-        format: {
-          enable: false,
-        },
-        validate: true,
-        hover: true,
-        completion: true,
-        schemas: {
-          kubernetes: k8sFiles,
-        },
-        schemaStore: { enable: true },
-      },
+    const customSchemas: Record<string, string[]> = {
+      kubernetes: generateKubernetesPaths(),
     };
 
     const clientOptions: ClientOptions = {
       syntaxes: ["yaml"],
-      initializationOptions: settings,
     };
 
     // Create our LanguageClient and start it
@@ -243,12 +168,18 @@ export async function activate() {
       console.error("LSP stopped", err);
     });
 
-    // Initially setup the workspace
-    // -> Needed to trigger yaml-language-server internals
-    client.sendNotification("workspace/didChangeConfiguration", { settings });
+    // Configure custom schemas
+    // -> Needs to be called before the server will process schemas
+    client.sendNotification("workspace/didChangeConfiguration", {
+      settings: {
+        yaml: {
+          schemas: customSchemas,
+        },
+      },
+    });
 
     //
-    // The message below don't work, it seems Nova is only exposing known/implemented requests
+    // The messages below don't work, it seems Nova is only exposing known/implemented requests
     //
 
     // const schemas = await fetchSchemaAssociations()

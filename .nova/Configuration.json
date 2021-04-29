@@ -1,4 +1,7 @@
 {
-  "workspace.color": 0,
-  "workspace.name": "nova/yaml"
+  "workspace.color" : 0,
+  "workspace.name" : "yaml",
+  "yaml.customTags" : [
+    "!secret scalar"
+  ]
 }

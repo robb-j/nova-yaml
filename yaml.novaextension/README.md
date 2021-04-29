@@ -58,6 +58,46 @@ For example, `.circleci/config.yml` or `.github/workflows/**.yml` have known sch
 
 To see all available schemas, visit [www.schemastore.org/json/](https://www.schemastore.org/json/).
 
+### Custom tags
+
+[YAML tags](https://yaml.org/spec/1.2/spec.html#id2761292)
+let you programatically control the parsing of values in YAML files during parsing.
+For example, a tag could be used to unpack a secret:
+
+```yaml
+passwordKey: !secret database.password
+```
+
+Yaml Extension needs to know about these tags so it can help with suggestions and error messages.
+You can define these globally or per-project inside of Nova.
+
+> **Note:** global and per-project custom tags are not merged.
+> If you have global tags you will need to duplicate them if you want per-project tags.
+
+Each line of the configuration should be a separate tag you want to add.
+It can optionally have a type too, which Yaml Extension will check the value of.
+
+The type can be either `scalar`, `mapping` or `sequence`,
+for more information, [look here](https://github.com/redhat-developer/yaml-language-server#adding-custom-tags).
+
+#### Global custom tags
+
+To set global custom-tags, go to **Extensions** → **Extension Library...**.
+Then navigate to **YAML** and then to the **Preferences** tab.
+
+#### Per-project custom tags
+
+To set per-project, navigate to your project settings by clicking your project name in the top left.
+Then go to **YAML** in the side bar and configure **Custom tags** there.
+
+#### Example custom tags
+
+```
+!secret scalar
+!automobile mapping
+!peopleList sequence
+```
+
 ### Under the hood
 
 Yaml Extension runs the [redhat-developer/yaml-language-server](http://github.com/redhat-developer/yaml-language-server) Language Server which
