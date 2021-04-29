@@ -28,20 +28,25 @@ For extension information go to [./yaml.novaextension](/yaml.novaextension)
 **with rollup**
 
 Uncomment yaml-server entrypoint in [rollup.config.js](/rollup.config.js)
+and run the build
 
 ```
-Error: Cannot find module 'vscode-json-languageservice/lib/umd/services/jsonDefinition'
+The server runs but nothing does anything, --inspect debugging doesn't work either
 ```
+
+> Last attempted: 29/05/21
 
 **with @vercel/ncc**
 
 ```bash
-npx @vercel/ncc build src/server.ts -o yaml-server
+npx ncc build src/Scripts/yaml-server.js -o yaml-server --target=es5
 ```
 
 ```
 Error: Cannot find module '../utils/objects'
 ```
+
+> Last attempted: 29/05/21
 
 </details>
 
