@@ -77,6 +77,7 @@ Error: Cannot find module '../utils/objects'
   - which version numbers to increment (package.json, extension.json, root package.json ?)
 - handle promise rejections from the server to work around LSP dynamic capability limitations
 - move large screenshots out of extension folder
+- add more configuration options and add per-project config too
 
 ## bugs
 
