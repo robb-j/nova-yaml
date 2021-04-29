@@ -59,7 +59,7 @@
       "title": "Completions",
       "type": "boolean",
       "default": true,
-      "description": "Whether suggest completions"
+      "description": "Whether to suggest completions"
     },
     {
       "key": "yaml.customTags",
