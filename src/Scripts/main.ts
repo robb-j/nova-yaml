@@ -168,11 +168,21 @@ export async function activate() {
       console.error("LSP stopped", err);
     });
 
-    // Configure custom schemas
+    // Send the initial server configuration & custom schemas
     // -> Needs to be called before the server will process schemas
-    client.sendNotification("workspace/didChangeConfiguration", {
+    // -> I think these values should be sent to the server automatically
+    //    but they don't seem to be during startup
+    //    but they are differentially sent when editing preferences
+    client?.sendNotification("workspace/didChangeConfiguration", {
       settings: {
         yaml: {
+          format: {
+            enable: nova.config.get("yaml.format.enable", "boolean"),
+          },
+          validate: nova.config.get("yaml.validate", "boolean"),
+          hover: nova.config.get("yaml.hover", "boolean"),
+          completion: nova.config.get("yaml.completion", "boolean"),
+          customTags: nova.config.get("yaml.customTags", "array"),
           schemas: customSchemas,
         },
       },
