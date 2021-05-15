@@ -1,7 +1,5 @@
 {
-  "workspace.color" : 0,
-  "workspace.name" : "yaml",
-  "yaml.customTags" : [
-    "!secret scalar"
-  ]
+  "workspace.color": 0,
+  "workspace.name": "yaml",
+  "yaml.customTags": ["!secret scalar"]
 }

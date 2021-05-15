@@ -8,6 +8,9 @@ import { execute } from "./utils";
 // Toggle on in development to --inspect the language server
 const DEBUG_INSPECT = false;
 
+// Toggle on to log to a file
+const DEBUG_LOGS = false;
+
 let client: LanguageClient | null = null;
 let disposable: CompositeDisposable | null = null;
 
@@ -25,7 +28,10 @@ dependencyManagement.registerDependencyUnlockCommand(
  */
 function debug(...args: any[]) {
   if (nova.inDevMode() === false) return;
-  console.log("[main]", ...args);
+  const humanArgs = args.map((arg) =>
+    typeof arg === "object" ? JSON.stringify(arg) : arg
+  );
+  console.log("[main]", ...humanArgs);
 }
 
 /**
@@ -133,20 +139,37 @@ export async function activate() {
 
     // Forces an unhandled promise rejection to "warn" as there is no way to prevent LSP issue right now
     // https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode
+    const nodeArgs = ["--unhandled-rejections=warn"];
 
+    // Add debug args if that mode is enabled
+    if (DEBUG_INSPECT) {
+      nodeArgs.push("--inspect-brk=9231", "--trace-warnings");
+    }
+
+    // Construct the server arguments
     const serverOptions: ServerOptions = {
       type: "stdio",
       path: nodePath,
-      args: ["--unhandled-rejections=warn", serverPath, "--stdio"],
+      args: [...nodeArgs, serverPath, "--stdio"],
     };
 
-    if (DEBUG_INSPECT) {
-      serverOptions.args!.unshift("--inspect-brk=9231", "--trace-warnings");
+    // If in logging mode, swap around the server to output stdin/out to locale files
+    // Thanks, @apexskier
+    if (DEBUG_LOGS && nova.workspace.path) {
+      const stdinLog = nova.path.join(nova.workspace.path, "stdin.log");
+      const stdoutLog = nova.path.join(nova.workspace.path, "stdout.log");
+
+      const args = nodeArgs.join(" ");
+      const command = `${nodePath} ${args} "${serverPath}" --stdio`;
+
+      serverOptions.path = "/bin/sh";
+      serverOptions.args = [
+        "-c",
+        `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`,
+      ];
     }
 
-    const customSchemas: Record<string, string[]> = {
-      kubernetes: generateKubernetesPaths(),
-    };
+    debug("serverOptions", serverOptions);
 
     const clientOptions: ClientOptions = {
       syntaxes: ["yaml"],
@@ -163,7 +186,6 @@ export async function activate() {
     client.start();
 
     // Log an error if it stopped for some reason
-    // Could fail if node.js exists on uncaught promise rejections
     client.onDidStop((err) => {
       console.error("LSP stopped", err);
     });
@@ -173,20 +195,7 @@ export async function activate() {
     // -> I think these values should be sent to the server automatically
     //    but they don't seem to be during startup
     //    but they are differentially sent when editing preferences
-    client?.sendNotification("workspace/didChangeConfiguration", {
-      settings: {
-        yaml: {
-          format: {
-            enable: nova.config.get("yaml.format.enable", "boolean"),
-          },
-          validate: nova.config.get("yaml.validate", "boolean"),
-          hover: nova.config.get("yaml.hover", "boolean"),
-          completion: nova.config.get("yaml.completion", "boolean"),
-          customTags: nova.config.get("yaml.customTags", "array"),
-          schemas: customSchemas,
-        },
-      },
-    });
+    updateConfig(client);
 
     //
     // The messages below don't work, it seems Nova is only exposing known/implemented requests
@@ -228,6 +237,41 @@ export async function activate() {
       nova.workspace.showErrorMessage(error);
     }
   }
+}
+
+function getConfig() {
+  // Map out custom files to be kubernetes schemas
+  const customSchemas: Record<string, string[]> = {
+    kubernetes: generateKubernetesPaths(),
+  };
+
+  // Note: this *could* merge global/project tags but nova's default is to
+  // use the most specific and that's what it sends when editing preferences
+  const customTags =
+    nova.workspace.config.get("yaml.customTags", "array") ??
+    nova.config.get("yaml.customTags", "array") ??
+    [];
+
+  return {
+    yaml: {
+      format: {
+        enable: nova.config.get("yaml.format.enable", "boolean"),
+      },
+      validate: nova.config.get("yaml.validate", "boolean"),
+      hover: nova.config.get("yaml.hover", "boolean"),
+      completion: nova.config.get("yaml.completion", "boolean"),
+      customTags: customTags,
+      schemas: customSchemas,
+    },
+  };
+}
+
+function updateConfig(client: LanguageClient) {
+  // Note: Either the LSP should request the required config
+  // or Nova should send it itself, but for now I'm sending it
+  client.sendNotification("workspace/didChangeConfiguration", {
+    settings: getConfig(),
+  });
 }
 
 /**
