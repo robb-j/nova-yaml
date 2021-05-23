@@ -18,7 +18,7 @@
     "@types/jest": "^26.0.23",
     "@types/nova-editor-node": "^4.1.2",
     "@types/whatwg-fetch": "0.0.33",
-    "@vercel/ncc": "^0.28.4",
+    "@vercel/ncc": "^0.28.5",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "magic-string": "^0.25.7",
