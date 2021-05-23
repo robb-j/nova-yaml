@@ -1,3 +1,12 @@
+## Version 1.1.1
+
+**Tweaks**
+
+- Fix extension preferences, they weren't initially synchronised between Nova and the YAML server.
+- Upgraded yaml-language-server to `0.19.2`, it was `0.18.0`.
+  [See the Changelog](https://github.com/redhat-developer/yaml-language-server/blob/master/CHANGELOG.md#0192)
+- Downgrade the `npm-shrinkwrap.json` back to v1 for better compatibility.
+
 ## Version 1.1
 
 **Features**
