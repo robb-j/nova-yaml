@@ -5,7 +5,7 @@
   "packages": {
     "": {
       "dependencies": {
-        "yaml-language-server": "^0.18.0"
+        "yaml-language-server": "^0.19.2"
       }
     },
     "node_modules/agent-base": {
@@ -20,12 +20,9 @@
       }
     },
     "node_modules/argparse": {
-      "version": "1.0.10",
-      "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz",
-      "integrity": "sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==",
-      "dependencies": {
-        "sprintf-js": "~1.0.2"
-      }
+      "version": "2.0.1",
+      "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
+      "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="
     },
     "node_modules/balanced-match": {
       "version": "1.0.2",
@@ -67,18 +64,6 @@
         "es6-promise": "^4.0.3"
       }
     },
-    "node_modules/esprima": {
-      "version": "4.0.1",
-      "resolved": "https://registry.npmjs.org/esprima/-/esprima-4.0.1.tgz",
-      "integrity": "sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==",
-      "bin": {
-        "esparse": "bin/esparse.js",
-        "esvalidate": "bin/esvalidate.js"
-      },
-      "engines": {
-        "node": ">=4"
-      }
-    },
     "node_modules/http-proxy-agent": {
       "version": "2.1.0",
       "resolved": "https://registry.npmjs.org/http-proxy-agent/-/http-proxy-agent-2.1.0.tgz",
@@ -104,12 +89,11 @@
       }
     },
     "node_modules/js-yaml": {
-      "version": "3.14.1",
-      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.14.1.tgz",
-      "integrity": "sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==",
+      "version": "4.1.0",
+      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.0.tgz",
+      "integrity": "sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==",
       "dependencies": {
-        "argparse": "^1.0.7",
-        "esprima": "^4.0.0"
+        "argparse": "^2.0.1"
       },
       "bin": {
         "js-yaml": "bin/js-yaml.js"
@@ -157,11 +141,6 @@
         "https-proxy-agent": "^2.2.3",
         "vscode-nls": "^4.1.1"
       }
-    },
-    "node_modules/sprintf-js": {
-      "version": "1.0.3",
-      "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz",
-      "integrity": "sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw="
     },
     "node_modules/vscode-json-languageservice": {
       "version": "4.1.2",
@@ -243,14 +222,14 @@
       "integrity": "sha512-8TEXQxlldWAuIODdukIb+TR5s+9Ds40eSJrw+1iDDA9IFORPjMELarNQE3myz5XIkWWpdprmJjm1/SxMlWOC8A=="
     },
     "node_modules/yaml-language-server": {
-      "version": "0.18.0",
-      "resolved": "https://registry.npmjs.org/yaml-language-server/-/yaml-language-server-0.18.0.tgz",
-      "integrity": "sha512-Cm3UKlaEzvd+my1L4lf5NKfCqDCkdxLmuvq8jRWOPjtrGEdY41EtuY1V+lRdRREVXyurgy4NPVFWzarcl5CltQ==",
+      "version": "0.19.2",
+      "resolved": "https://registry.npmjs.org/yaml-language-server/-/yaml-language-server-0.19.2.tgz",
+      "integrity": "sha512-E4yMj1oK+OCObD15LvEaHOw8y3ux7G4KrREQDsDkjqFhUm/3qCCPMh3NPXTRQyse3r6Xpsv+lAW17Qo/NKm+0g==",
       "dependencies": {
-        "js-yaml": "^3.13.1",
+        "js-yaml": "^4.1.0",
         "jsonc-parser": "^2.2.1",
         "request-light": "^0.2.4",
-        "vscode-json-languageservice": "^4.0.2",
+        "vscode-json-languageservice": "^4.1.0",
         "vscode-languageserver": "^7.0.0",
         "vscode-languageserver-textdocument": "^1.0.1",
         "vscode-languageserver-types": "^3.16.0",
@@ -262,7 +241,9 @@
         "yaml-language-server": "bin/yaml-language-server"
       },
       "engines": {
-        "node": "*"
+        "node": "*",
+        "npm": "\n\nERROR: Please use yarn, npm is not supported in this repository!!!\n\n",
+        "yarn": "^1.22.5"
       },
       "optionalDependencies": {
         "prettier": "2.0.5"
@@ -284,12 +265,9 @@
       }
     },
     "argparse": {
-      "version": "1.0.10",
-      "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz",
-      "integrity": "sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==",
-      "requires": {
-        "sprintf-js": "~1.0.2"
-      }
+      "version": "2.0.1",
+      "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
+      "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="
     },
     "balanced-match": {
       "version": "1.0.2",
@@ -331,11 +309,6 @@
         "es6-promise": "^4.0.3"
       }
     },
-    "esprima": {
-      "version": "4.0.1",
-      "resolved": "https://registry.npmjs.org/esprima/-/esprima-4.0.1.tgz",
-      "integrity": "sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A=="
-    },
     "http-proxy-agent": {
       "version": "2.1.0",
       "resolved": "https://registry.npmjs.org/http-proxy-agent/-/http-proxy-agent-2.1.0.tgz",
@@ -355,12 +328,11 @@
       }
     },
     "js-yaml": {
-      "version": "3.14.1",
-      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.14.1.tgz",
-      "integrity": "sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==",
+      "version": "4.1.0",
+      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.0.tgz",
+      "integrity": "sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==",
       "requires": {
-        "argparse": "^1.0.7",
-        "esprima": "^4.0.0"
+        "argparse": "^2.0.1"
       }
     },
     "jsonc-parser": {
@@ -396,11 +368,6 @@
         "https-proxy-agent": "^2.2.3",
         "vscode-nls": "^4.1.1"
       }
-    },
-    "sprintf-js": {
-      "version": "1.0.3",
-      "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz",
-      "integrity": "sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw="
     },
     "vscode-json-languageservice": {
       "version": "4.1.2",
@@ -475,15 +442,15 @@
       "integrity": "sha512-8TEXQxlldWAuIODdukIb+TR5s+9Ds40eSJrw+1iDDA9IFORPjMELarNQE3myz5XIkWWpdprmJjm1/SxMlWOC8A=="
     },
     "yaml-language-server": {
-      "version": "0.18.0",
-      "resolved": "https://registry.npmjs.org/yaml-language-server/-/yaml-language-server-0.18.0.tgz",
-      "integrity": "sha512-Cm3UKlaEzvd+my1L4lf5NKfCqDCkdxLmuvq8jRWOPjtrGEdY41EtuY1V+lRdRREVXyurgy4NPVFWzarcl5CltQ==",
+      "version": "0.19.2",
+      "resolved": "https://registry.npmjs.org/yaml-language-server/-/yaml-language-server-0.19.2.tgz",
+      "integrity": "sha512-E4yMj1oK+OCObD15LvEaHOw8y3ux7G4KrREQDsDkjqFhUm/3qCCPMh3NPXTRQyse3r6Xpsv+lAW17Qo/NKm+0g==",
       "requires": {
-        "js-yaml": "^3.13.1",
+        "js-yaml": "^4.1.0",
         "jsonc-parser": "^2.2.1",
         "prettier": "2.0.5",
         "request-light": "^0.2.4",
-        "vscode-json-languageservice": "^4.0.2",
+        "vscode-json-languageservice": "^4.1.0",
         "vscode-languageserver": "^7.0.0",
         "vscode-languageserver-textdocument": "^1.0.1",
         "vscode-languageserver-types": "^3.16.0",
