@@ -8,7 +8,9 @@ metadata:
   name: sample-service
 spec:
   selector:
-    app: some-deployment
+    app.kubernetes.io/name: some-deployment
+    app.kubernetes.io/instance: development
+    app.kubernetes.io/version: v1.0.0
   ports:
     - port: 80
       name: http

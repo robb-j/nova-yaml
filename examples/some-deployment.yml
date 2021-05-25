@@ -8,12 +8,13 @@ metadata:
   name: sample-deployment
 spec:
   selector:
-    matchLabels:
-      app: sample-deployment
+    matchLabels: &labels
+      app.kubernetes.io/name: some-deployment
+      app.kubernetes.io/instance: development
+      app.kubernetes.io/version: v1.0.0
   template:
     metadata:
-      labels:
-        app: sample-deployment
+      labels: *labels
     spec:
       containers:
         - name: sample-deployment
