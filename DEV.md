@@ -98,12 +98,14 @@ const schemas = await fetchSchemaAssociations();
 client.sendNotification("json/schemaAssociations", schemas);
 
 // Tell the server that we are ready to provide custom schema content
+// - This is sent to YAML and it starts sending "custom/schema/request" requests
 client.sendNotification("yaml/registerCustomSchemaRequest");
 
 // Tell the server that the client supports schema requests sent directly to it
 client.sendNotification("yaml/registerContentRequest");
 
 // If the server asks for custom schemas, get it and send it back
+// This isn't triggered when a request is fired
 client.onRequest("custom/schema/request", (resource: string) => {
   debug("custom/schema/request resource:", resource);
   throw new Error("Not implemented");
