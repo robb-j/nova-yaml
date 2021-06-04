@@ -8,3 +8,4 @@ node_modules
 
 stdin.log
 stdout.log
+tmp.json

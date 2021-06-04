@@ -24,10 +24,6 @@
       {
         "command": "robb-j.yaml.reload",
         "title": "Reload Yaml Server"
-      },
-      {
-        "command": "robb-j.yaml.forceClearLock",
-        "title": "Reset Yaml Install Lock"
       }
     ]
   },
