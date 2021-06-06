@@ -123,3 +123,65 @@ client.onRequest("vscode/content", async (uri: string) => {
   throw new Error("Not implemented");
 });
 ```
+
+---
+
+## Completion Issue
+
+**Text**
+
+```yaml
+      volumes:
+        - name: html
+          persistentVolumeClaim:
+            claimName: sample-pvc
+          configMap:
+  (•••)
+```
+
+**The request**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "method": "textDocument/completion",
+  "params": {
+    "context": { "triggerCharacter": "c", "triggerKind": 2 },
+    "textDocument": {
+      "uri": "file:///Volumes/Macintosh%20HD/Users/rob/dev/nova/yaml/examples/some-deployment.yml"
+    },
+    "position": { "line": 30, "character": 11 }
+  }
+}
+```
+
+**The response**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "result": {
+    "items": [
+      "...",
+      {
+        "kind": 10,
+        "label": "configMap",
+        "insertText": "configMap:\n  $1",
+        "insertTextFormat": 2,
+        "documentation": "ConfigMap represents a configMap that should populate this volume",
+        "textEdit": {
+          "range": {
+            "start": { "line": 30, "character": 10 },
+            "end": { "line": 30, "character": 11 }
+          },
+          "newText": "configMap:\n  $1"
+        }
+      },
+      "..."
+    ],
+    "isIncomplete": false
+  }
+}
+```
