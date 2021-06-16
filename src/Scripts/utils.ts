@@ -121,17 +121,22 @@ export function createDebug(namespace: string) {
   };
 }
 
+/**
+ * Clean up previous dependencies that were in dependencyManagement
+ */
 export async function cleanupStorage() {
+  const debug = createDebug("cleanupStorage");
+
   const path = nova.path.join(
     nova.extension.globalStoragePath,
     "dependencyManagement"
   );
 
-  console.log("rm -rf", path);
+  if (nova.fs.access(path, nova.fs.F_OK)) {
+    debug(`rm -r ${path}`);
 
-  // if (nova.fs.access(path, nova.fs.F_OK))
-
-  // await execute('/usr/bin/env', {
-  //   args: ['rm', '-r', path]
-  // })
+    await execute("/usr/bin/env", {
+      args: ["rm", "-r", path],
+    });
+  }
 }

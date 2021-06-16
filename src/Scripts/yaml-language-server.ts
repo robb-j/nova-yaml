@@ -6,7 +6,7 @@ type ClientOptions = ConstructorParameters<typeof LanguageClient>[3];
 const debug = createDebug("yaml");
 
 const DEBUG_INSPECT = false;
-const DEBUG_LOGS = true;
+const DEBUG_LOGS = false;
 
 export class YamlLanguageServer {
   languageClient: LanguageClient | null = null;
@@ -153,33 +153,9 @@ export class YamlLanguageServer {
       extension.get("yaml.customTags", "array") ??
       [];
 
-    // const editor = {
-    //   formatOnSave: nova.workspace.config.get("editor.formatOnSave", "boolean"),
-    //   tabSize: nova.workspace.config.get("editor.tabSize", "number"),
-    //   detectIndentation: nova.workspace.config.get(
-    //     "editor.detectIndentation",
-    //     "boolean"
-    //   ),
-    //   insertSpaces: nova.workspace.config.get("editor.insertSpaces", "boolean"),
-    //   autoIndent: nova.workspace.config.get("editor.autoIndent", "boolean"),
-    // };
-
-    const editor = {
-      formatOnSave: true,
-      tabSize: 2,
-      detectIndentation: true,
-      insertSpaces: true,
-      autoIndent: true,
-    };
-
-    debug("editor", editor);
-
     return {
-      editor,
       yaml: {
-        format: {
-          enable: extension.get("yaml.format.enable", "boolean"),
-        },
+        "format.enable": extension.get("yaml.format.enable", "boolean"),
         validate: extension.get("yaml.validate", "boolean"),
         hover: extension.get("yaml.hover", "boolean"),
         completion: extension.get("yaml.completion", "boolean"),

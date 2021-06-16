@@ -3,7 +3,7 @@
 //
 
 import { reloadCommand } from "./commands/all";
-import { createDebug } from "./utils";
+import { cleanupStorage, createDebug } from "./utils";
 import { YamlLanguageServer } from "./yaml-language-server";
 
 const debug = createDebug("main");
@@ -13,6 +13,8 @@ export function activate() {
   debug("#activate");
 
   langServer = new YamlLanguageServer();
+
+  cleanupStorage();
 }
 export function deactivate() {
   debug("#deactivate");
