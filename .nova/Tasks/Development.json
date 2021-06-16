@@ -1,0 +1,10 @@
+{
+  "actions" : {
+    "build" : {
+      "enabled" : true,
+      "script" : ".\/bin\/build.sh"
+    }
+  },
+  "identifier" : "0AA8B06D-2449-4944-BC8C-113FAD347DB9",
+  "openLogOnRun" : "fail"
+}

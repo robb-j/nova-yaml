@@ -11,7 +11,7 @@ Let's get started!
 **Yaml Extension** provides deeper integration with **YAML** (YAML Ain't Markup Language), including linting yaml documents
 and validating against known JSON schemas, including Kubernetes resources.
 
-<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/preview.gif" width="800" alt="Yaml Extension adds deeper YAML integration to Nova based on JSON schemas">
+<img src="https://raw.githubusercontent.com/robb-j/nova-yaml/main/yaml.novaextension/Images/extension/preview.gif" width="800" alt="Yaml Extension adds deeper YAML integration to Nova based on JSON schemas">
 
 ## Requirements
 
@@ -41,14 +41,14 @@ Yaml Extension requires these Nova permissions:
   - to install the language server in extension storage (`~/Library/Application Support/Nova/Extensions/robb-j.yaml`)
 
 > This information is based on my experience setting up the language server (which I didn't write).
-> If you find it is doing something not described above please [fill out an Issue](https://github.com/robb-j/nova-yaml-language-server/issues),
+> If you find it is doing something not described above please [fill out an Issue](https://github.com/robb-j/nova-yaml/issues),
 > I want this information to be as correct and informative as possible.
 
 ## Usage
 
 Yaml Extension runs any time you open a local project with YAML files in it, automatically lints all open files, then reports errors and warnings in Nova's **Issues** sidebar and the editor gutter:
 
-<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/validation.png" width="800" alt="Yaml Extension adds on-hover tooltips to Nova based on JSON schemas">
+<img src="https://raw.githubusercontent.com/robb-j/nova-yaml/main/yaml.novaextension/Images/extension/validation.png" width="800" alt="Yaml Extension adds on-hover tooltips to Nova based on JSON schemas">
 
 ### JSON schemas
 
@@ -124,17 +124,17 @@ For example:
 - `my-special-service.yaml`
 - `ingress.yml`
 - `app-cm.yaml`
-- [My test examples](https://github.com/robb-j/nova-yaml-language-server/tree/master/examples)
+- [My test examples](https://github.com/robb-j/nova-yaml/tree/master/examples)
 
 > Hopefully a future version of this extension will parse out the `apiVersion` and `kind` values and validate files dynamically based on them, but this currently isn't possible.
 
 ### Screenshots
 
-<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/validation.png" width="800" alt="YAML files are validated against JSON schemas">
+<img src="https://raw.githubusercontent.com/robb-j/nova-yaml/main/yaml.novaextension/Images/extension/validation.png" width="800" alt="YAML files are validated against JSON schemas">
 
-<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/on-hover.png" width="800" alt="Get tooltips when writting YAML files based on the associated JSON schema">
+<img src="https://raw.githubusercontent.com/robb-j/nova-yaml/main/yaml.novaextension/Images/extension/on-hover.png" width="800" alt="Get tooltips when writting YAML files based on the associated JSON schema">
 
-<img src="https://raw.githubusercontent.com/robb-j/nova-yaml-language-server/main/yaml.novaextension/Images/extension/completion.png" width="800" alt="See completion options as you write based on the JSON schema">
+<img src="https://raw.githubusercontent.com/robb-j/nova-yaml/main/yaml.novaextension/Images/extension/completion.png" width="800" alt="See completion options as you write based on the JSON schema">
 
 ## Install
 
@@ -156,7 +156,7 @@ Try resetting the install lock by selecting the **Editor → YAML → Reset Yaml
 this is most likely with multiple Nova windows open, so try again with a single workspace.
 
 If you see any other errors in that log that aren't like `Error: Invalid parameter: registrations`,
-or the stack trace below that, please [fill out an Issue](https://github.com/robb-j/nova-yaml-language-server/issues).
+or the stack trace below that, please [fill out an Issue](https://github.com/robb-j/nova-yaml/issues).
 
 ## Known issues
 

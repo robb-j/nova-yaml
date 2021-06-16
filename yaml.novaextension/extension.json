@@ -6,8 +6,8 @@
   "version": "1.1.1",
   "categories": ["completions", "languages", "issues"],
   "license": "MIT",
-  "repository": "https://github.com/robb-j/nova-yaml-language-server",
-  "bugs": "https://github.com/robb-j/nova-yaml-language-server/issues",
+  "repository": "https://github.com/robb-j/nova-yaml",
+  "bugs": "https://github.com/robb-j/nova-yaml/issues",
 
   "main": "main.dist.js",
 
@@ -24,10 +24,6 @@
       {
         "command": "robb-j.yaml.reload",
         "title": "Reload Yaml Server"
-      },
-      {
-        "command": "robb-j.yaml.forceClearLock",
-        "title": "Reset Yaml Install Lock"
       }
     ]
   },

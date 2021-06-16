@@ -15,4 +15,4 @@ jobs:
           CI: true
       - name: run the build
         run: |
-          npm run build
+          ./bin/build.sh

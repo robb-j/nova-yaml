@@ -82,9 +82,61 @@ export function writeFile(path: string, contents: string) {
   writer.close();
 }
 
+export function copyToExtensionStorage(filename: string) {
+  const source = nova.path.join(nova.extension.path, filename);
+  const destination = nova.path.join(
+    nova.extension.globalStoragePath,
+    filename
+  );
+
+  if (nova.fs.access(destination, nova.fs.constants.F_OK)) {
+    nova.fs.remove(destination);
+  }
+  nova.fs.copy(source, destination);
+}
+
 /**
  * Write a json value to a utf8 encoded JSON string
  */
 export function writeJson<T = any>(path: string, data: T) {
   return writeFile(path, JSON.stringify(data, null, 2));
+}
+
+/**
+ * Generate a method for namespaced debug-only logging,
+ * inspired by https://github.com/visionmedia/debug.
+ *
+ * - prints messages under a namespace
+ * - only outputs logs when nova.inDevMode()
+ * - converts object arguments to json
+ */
+export function createDebug(namespace: string) {
+  return (...args: any[]) => {
+    if (!nova.inDevMode()) return;
+
+    const humanArgs = args.map((arg) =>
+      typeof arg === "object" ? JSON.stringify(arg) : arg
+    );
+    console.info(`${namespace}:`, ...humanArgs);
+  };
+}
+
+/**
+ * Clean up previous dependencies that were in dependencyManagement
+ */
+export async function cleanupStorage() {
+  const debug = createDebug("cleanupStorage");
+
+  const path = nova.path.join(
+    nova.extension.globalStoragePath,
+    "dependencyManagement"
+  );
+
+  if (nova.fs.access(path, nova.fs.F_OK)) {
+    debug(`rm -r ${path}`);
+
+    await execute("/usr/bin/env", {
+      args: ["rm", "-r", path],
+    });
+  }
 }
