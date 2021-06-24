@@ -12,6 +12,7 @@ For extension information go to [./yaml.novaextension](/yaml.novaextension)
 - https://github.com/redhat-developer/yaml-language-server
 - https://github.com/redhat-developer/vscode-yaml
 - https://docs.nova.app/api-reference/language-client/#supported-language-server-transport-types
+- https://github.com/redhat-developer/yaml-language-server/issues/129
 
 ## design goals
 
