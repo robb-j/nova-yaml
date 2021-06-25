@@ -7,6 +7,7 @@ const debug = createDebug("yaml");
 
 const DEBUG_INSPECT = false;
 const DEBUG_LOGS = false;
+const DEBUG_LOCAL_INSTALL = false;
 
 export class YamlLanguageServer {
   languageClient: LanguageClient | null = null;
@@ -36,11 +37,13 @@ export class YamlLanguageServer {
       copyToExtensionStorage("package.json");
       copyToExtensionStorage("package-lock.json");
 
-      const { stdout } = await execute("/usr/bin/env", {
-        args: ["npm", "install", "--no-audit", "--only=production"],
-        cwd: nova.extension.globalStoragePath,
-      });
-      debug(stdout.trim());
+      if (DEBUG_LOCAL_INSTALL) {
+        const { stdout } = await execute("/usr/bin/env", {
+          args: ["npm", "install", "--no-audit", "--only=production"],
+          cwd: nova.extension.globalStoragePath,
+        });
+        debug(stdout.trim());
+      }
 
       const serverOptions = await this.getServerOptions(
         DEBUG_LOGS ? nova.workspace.path : null
@@ -64,24 +67,23 @@ export class YamlLanguageServer {
       nova.subscriptions.add(client as any);
       this.languageClient = client;
 
-      this.setupLanguageServer(client);
+      // this.setupLanguageServer(client);
+
+      client.onDidStop((err) => {
+        debug("client.onDidStop", err?.message);
+      });
     } catch (error) {
       debug("LanguageServer Failed", error.message);
     }
   }
 
   setupLanguageServer(client: LanguageClient) {
-    // Note: Either the LSP should request the required config
-    // or Nova should send it itself, but for now I'm sending it
-    //
-    // I think this also means yaml LS doesn't have "editor" values
-    // but I don't think I have access to get those values
-    client.sendNotification("workspace/didChangeConfiguration", {
-      settings: this.getConfig(),
+    client.onRequest("custom/schema/request", async (file) => {
+      debug("custom/schema/request", file);
+      return [];
     });
 
-    // testing ....
-    // client.sendNotification("yaml/registerCustomSchemaRequest");
+    client.sendNotification("yaml/registerCustomSchemaRequest");
   }
 
   stop() {
@@ -99,9 +101,9 @@ export class YamlLanguageServer {
   //
 
   async getServerOptions(debugPath: string | null) {
-    const nodeArgs = ["--unhandled-rejections=warn"];
+    const nodeArgs = ["--unhandled-rejections=warn", "--trace-warnings"];
     const serverPath = nova.path.join(
-      nova.extension.globalStoragePath,
+      this.installDirectory(),
       "node_modules/yaml-language-server/out/server/src/server.js"
     );
 
@@ -109,7 +111,7 @@ export class YamlLanguageServer {
       nodeArgs.push("--inspect-brk=9231", "--trace-warnings");
     }
 
-    const nodePath = await this.findNodeJsPath();
+    const nodePath = await this.findBinaryPath("node");
     debug("nodePath", nodePath);
 
     if (!nodePath) {
@@ -117,16 +119,33 @@ export class YamlLanguageServer {
     }
 
     if (debugPath) {
-      const stdinLog = nova.path.join(debugPath, "stdin.log");
-      const stdoutLog = nova.path.join(debugPath, "stdout.log");
+      // const stdinLog = nova.path.join(debugPath, "stdin.log");
+      // const stdoutLog = nova.path.join(debugPath, "stdout.log");
 
-      const args = nodeArgs.join(" ");
-      const command = `${nodePath} ${args} "${serverPath}" --stdio`;
+      // const args = nodeArgs.join(" ");
+      // const command = `${nodePath} ${args} '${serverPath}' --stdio`;
+
+      // return {
+      //   type: "stdio",
+      //   path: "/bin/sh",
+      //   args: ["-c", `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`],
+      // } as ServerOptions;
+
+      const lspDebug = "/Users/rob/dev/labs/lsp-debug/dist/cli.js";
+      const logPath = nova.path.join(debugPath, "debug.log");
 
       return {
         type: "stdio",
-        path: "/bin/sh",
-        args: ["-c", `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`],
+        path: nodePath,
+        args: [
+          lspDebug,
+          `--command="${nodePath}"`,
+          `--arg=--unhandled-rejections=warn`,
+          `--arg=--trace-warnings`,
+          `--arg="${serverPath}"`,
+          `--arg="--stdio"`,
+          `--log="${logPath}"`,
+        ],
       } as ServerOptions;
     }
 
@@ -169,11 +188,19 @@ export class YamlLanguageServer {
    * Find out the path of nodejs for the current setup.
    * Runs `which node` to get the path or returns null
    */
-  async findNodeJsPath(): Promise<string | null> {
+  async findBinaryPath(binary: string): Promise<string | null> {
     const { stdout, status } = await execute("/usr/bin/env", {
-      args: ["which", "node"],
+      args: ["which", binary],
     });
     return status === 0 ? stdout.trim() : null;
+  }
+
+  installDirectory() {
+    return nova.path.join(
+      DEBUG_LOCAL_INSTALL
+        ? nova.path.join(nova.workspace.path!, "yaml.novaextension")
+        : nova.extension.globalStoragePath
+    );
   }
 
   generateKubernetesPaths(): string[] {
