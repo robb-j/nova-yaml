@@ -1,5 +1,17 @@
 {
   "workspace.color": 0,
   "workspace.name": "yaml",
-  "yaml.customTags": ["!secret scalar"]
+  "yaml.customTags": ["!secret scalar"],
+  "yaml.schemas": {},
+  "yaml.validate": true,
+  "yaml.hover": true,
+  "yaml.completion": true,
+  "yaml.format": { "enable": true },
+
+  "[yaml].editor.insertSpaces": true,
+  "[yaml].editor.tabSize": 2,
+  "[yaml].editor.autoIndent": true,
+
+  "http.proxy": null,
+  "http.proxyStrictSSL": null
 }
