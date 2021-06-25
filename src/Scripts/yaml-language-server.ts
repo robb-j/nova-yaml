@@ -37,7 +37,7 @@ export class YamlLanguageServer {
       copyToExtensionStorage("package.json");
       copyToExtensionStorage("package-lock.json");
 
-      if (DEBUG_LOCAL_INSTALL) {
+      if (DEBUG_LOCAL_INSTALL === false) {
         const { stdout } = await execute("/usr/bin/env", {
           args: ["npm", "install", "--no-audit", "--only=production"],
           cwd: nova.extension.globalStoragePath,
