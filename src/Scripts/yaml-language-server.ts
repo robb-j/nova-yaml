@@ -5,8 +5,18 @@ type ClientOptions = ConstructorParameters<typeof LanguageClient>[3];
 
 const debug = createDebug("yaml");
 
+// Start the server with --inspect-brk
 const DEBUG_INSPECT = false;
+
+// Log stdin and stdout of the server to local files
 const DEBUG_LOGS = false;
+
+// Use experimental logger to combine logs together in vscode style
+// requires build at /Users/rob/dev/labs/lsp-debug/dist/cli.js
+const EXPERIMENTAL_LOGGER = false;
+
+// Assume the packages are already installed
+// tip: npm link a local yaml-server to yaml.novaextension
 const DEBUG_LOCAL_INSTALL = false;
 
 export class YamlLanguageServer {
@@ -37,7 +47,7 @@ export class YamlLanguageServer {
       copyToExtensionStorage("package.json");
       copyToExtensionStorage("package-lock.json");
 
-      if (DEBUG_LOCAL_INSTALL === false) {
+      if (!DEBUG_LOCAL_INSTALL) {
         const { stdout } = await execute("/usr/bin/env", {
           args: ["npm", "install", "--no-audit", "--only=production"],
           cwd: nova.extension.globalStoragePath,
@@ -62,12 +72,10 @@ export class YamlLanguageServer {
         clientOptions
       );
 
-      client.start();
+      this.startLanguageServer(client);
 
       nova.subscriptions.add(client as any);
       this.languageClient = client;
-
-      // this.setupLanguageServer(client);
 
       client.onDidStop((err) => {
         debug("client.onDidStop", err?.message);
@@ -77,13 +85,19 @@ export class YamlLanguageServer {
     }
   }
 
-  setupLanguageServer(client: LanguageClient) {
-    client.onRequest("custom/schema/request", async (file) => {
-      debug("custom/schema/request", file);
-      return [];
-    });
+  startLanguageServer(client: LanguageClient) {
+    // client.onRequest("custom/schema/request", (file) => {
+    //   debug("custom/schema/request", file);
+    //   return [];
+    // });
 
-    client.sendNotification("yaml/registerCustomSchemaRequest");
+    client.start();
+
+    // client.sendNotification("yaml/registerCustomSchemaRequest");
+
+    // client.sendNotification("workspace/didChangeConfiguration", {
+    //   settings: this.getConfig(),
+    // });
   }
 
   stop() {
@@ -119,33 +133,35 @@ export class YamlLanguageServer {
     }
 
     if (debugPath) {
-      // const stdinLog = nova.path.join(debugPath, "stdin.log");
-      // const stdoutLog = nova.path.join(debugPath, "stdout.log");
+      if (EXPERIMENTAL_LOGGER) {
+        const lspDebug = "/Users/rob/dev/labs/lsp-debug/dist/cli.js";
+        const logPath = nova.path.join(debugPath, "debug.log");
 
-      // const args = nodeArgs.join(" ");
-      // const command = `${nodePath} ${args} '${serverPath}' --stdio`;
+        return {
+          type: "stdio",
+          path: nodePath,
+          args: [
+            lspDebug,
+            `--command="${nodePath}"`,
+            `--arg=--unhandled-rejections=warn`,
+            `--arg=--trace-warnings`,
+            `--arg="${serverPath}"`,
+            `--arg="--stdio"`,
+            `--log="${logPath}"`,
+          ],
+        } as ServerOptions;
+      }
 
-      // return {
-      //   type: "stdio",
-      //   path: "/bin/sh",
-      //   args: ["-c", `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`],
-      // } as ServerOptions;
+      const stdinLog = nova.path.join(debugPath, "stdin.log");
+      const stdoutLog = nova.path.join(debugPath, "stdout.log");
 
-      const lspDebug = "/Users/rob/dev/labs/lsp-debug/dist/cli.js";
-      const logPath = nova.path.join(debugPath, "debug.log");
+      const args = nodeArgs.join(" ");
+      const command = `${nodePath} ${args} '${serverPath}' --stdio`;
 
       return {
         type: "stdio",
-        path: nodePath,
-        args: [
-          lspDebug,
-          `--command="${nodePath}"`,
-          `--arg=--unhandled-rejections=warn`,
-          `--arg=--trace-warnings`,
-          `--arg="${serverPath}"`,
-          `--arg="--stdio"`,
-          `--log="${logPath}"`,
-        ],
+        path: "/bin/sh",
+        args: ["-c", `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`],
       } as ServerOptions;
     }
 
@@ -196,11 +212,9 @@ export class YamlLanguageServer {
   }
 
   installDirectory() {
-    return nova.path.join(
-      DEBUG_LOCAL_INSTALL
-        ? nova.path.join(nova.workspace.path!, "yaml.novaextension")
-        : nova.extension.globalStoragePath
-    );
+    return DEBUG_LOCAL_INSTALL
+      ? nova.path.join(nova.workspace.path!, "yaml.novaextension")
+      : nova.extension.globalStoragePath;
   }
 
   generateKubernetesPaths(): string[] {
