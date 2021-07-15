@@ -186,3 +186,33 @@ client.onRequest("vscode/content", async (uri: string) => {
   }
 }
 ```
+
+## Custom requests issue
+
+The idea is that you tell the LanguageServer you can handle http
+requests and it will forward them to the client via a LSP request:
+
+```ts
+client.sendNotification("yaml/registerCustomSchemaRequest");
+
+client.onRequest("custom/schema/request", async (file) => {
+  debug("custom/schema/request", file);
+  return fetch("the_url...");
+});
+```
+
+From inspecting the server I can see it is receiving the notification
+and sending a request for the file:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "custom/schema/request",
+  "params": [
+    "file:///Volumes/Macintosh%20HD/Users/rob/dev/nova/yaml/examples/kustomization.yml"
+  ]
+}
+```
+
+But Nova isn't calling my callback.
