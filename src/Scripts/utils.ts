@@ -5,12 +5,8 @@
 export type ProcessParams = ConstructorParameters<typeof Process>;
 export type ProcessOutput = { stdout: string; stderr: string; status: number };
 
-/**
- * Check a file exists
- */
-export function fileExists(path: string) {
-  return nova.fs.access(path, nova.fs.F_OK);
-}
+// @types/nova-editor doesn't seem to have a console
+export const console: Console = (globalThis as any).console;
 
 /**
  * Run a non-interactive process and get the stdout, stderr & status in one go
@@ -48,40 +44,6 @@ export function execute(
   });
 }
 
-/**
- * Read in a file as an utf8 encoded string, similar to node.js's fs.readFileSync
- */
-export function readFile(path: string): string | null {
-  if (!fileExists(path)) return null;
-  const file = nova.fs.open(path, "tr", "utf8") as FileTextMode;
-  const contents = file.read();
-  file.close();
-  return contents;
-}
-
-/**
- * Read in a file as a utf8 encoded json string and decode the json too
- */
-export function readJson<T = any>(path: string): T | null {
-  const data = readFile(path);
-  if (!data) return null;
-
-  try {
-    return JSON.parse(data) as T;
-  } catch (error) {
-    return null;
-  }
-}
-
-/**
- * Write a file as a utf8 string, similar to node.js fs.writeFileSync
- */
-export function writeFile(path: string, contents: string) {
-  const writer = nova.fs.open(path, "tx", "utf8") as FileTextMode;
-  writer.write(contents, "utf8");
-  writer.close();
-}
-
 export function copyToExtensionStorage(filename: string) {
   const source = nova.path.join(nova.extension.path, filename);
   const destination = nova.path.join(
@@ -93,13 +55,6 @@ export function copyToExtensionStorage(filename: string) {
     nova.fs.remove(destination);
   }
   nova.fs.copy(source, destination);
-}
-
-/**
- * Write a json value to a utf8 encoded JSON string
- */
-export function writeJson<T = any>(path: string, data: T) {
-  return writeFile(path, JSON.stringify(data, null, 2));
 }
 
 /**
@@ -122,7 +77,7 @@ export function createDebug(namespace: string) {
 }
 
 /**
- * Clean up previous dependencies that were in dependencyManagement
+ * Clean up previous dependencies that were in dependencyManagement/
  */
 export async function cleanupStorage() {
   const debug = createDebug("cleanupStorage");
@@ -139,4 +94,28 @@ export async function cleanupStorage() {
       args: ["rm", "-r", path],
     });
   }
+}
+
+/** Find the full path of a binary */
+export async function findBinaryPath(binary: string): Promise<string | null> {
+  const { stdout, status } = await execute("/usr/bin/env", {
+    args: ["which", binary],
+  });
+  return status === 0 ? stdout.trim() : null;
+}
+
+/**
+ * Ask the workspace user to choose an option
+ * and return a Promise for their response.
+ */
+export function askChoice(
+  workspace: Workspace,
+  placeholder: string | undefined,
+  choices: string[]
+) {
+  return new Promise<string | null>((resolve) => {
+    workspace.showChoicePalette(choices, { placeholder }, (choice) =>
+      resolve(choice)
+    );
+  });
 }

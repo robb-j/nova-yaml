@@ -1,13 +1,3 @@
-<!--
-👋 Hello! As Nova users browse the extensions library, a good README can help them understand what your extension does, how it works, and what setup or configuration it may require.
-
-Not every extension will need every item described below. Use your best judgement when deciding which parts to keep to provide the best experience for your new users.
-
-💡 Quick Tip! As you edit this README template, you can preview your changes by selecting **Extensions → Activate Project as Extension**, opening the Extension Library, and selecting "yaml" in the sidebar.
-
-Let's get started!
--->
-
 **Yaml Extension** provides deeper integration with **YAML** (YAML Ain't Markup Language), including linting yaml documents
 and validating against known JSON schemas, including Kubernetes resources.
 
@@ -23,30 +13,11 @@ Yaml Extension requires some additional tools to be installed on your Mac:
 
 > To install the current stable version of Node, click the "Recommended for Most Users" button to begin the download. When that completes, double-click the **.pkg** installer to begin installation.
 
-## Permissions
-
-Yaml Extension requires these Nova permissions:
-
-- `network` Yaml Extension uses a network connection:
-  - to associate YAML files with json schemas
-  - to download individual json schemas to validate against
-  - to download the language server when you first install or subsequently update the extension.
-- `process` Yaml Extension runs these subprocess:
-  - to determine if Node.js is installed
-  - to install the language server with NPM
-  - to run the language server which provides most of the features
-- `filesystem` Yaml Extension needs to read and write files:
-  - to read in YAML files so they can be validated
-  - to write back to files when applying completions
-  - to install the language server in extension storage (`~/Library/Application Support/Nova/Extensions/robb-j.yaml`)
-
-> This information is based on my experience setting up the language server (which I didn't write).
-> If you find it is doing something not described above please [fill out an Issue](https://github.com/robb-j/nova-yaml/issues),
-> I want this information to be as correct and informative as possible.
-
 ## Usage
 
-Yaml Extension runs any time you open a local project with YAML files in it, automatically lints all open files, then reports errors and warnings in Nova's **Issues** sidebar and the editor gutter:
+Yaml Extension runs any time you open a local project with YAML files in it,
+it automatically lints all open files,
+then reports errors and warnings in Nova's **Issues** sidebar and the editor gutter:
 
 <img src="https://raw.githubusercontent.com/robb-j/nova-yaml/main/yaml.novaextension/Images/extension/validation.png" width="800" alt="Yaml Extension adds on-hover tooltips to Nova based on JSON schemas">
 
@@ -58,10 +29,55 @@ For example, `.circleci/config.yml` or `.github/workflows/**.yml` have known sch
 
 To see all available schemas, visit [www.schemastore.org/json/](https://www.schemastore.org/json/).
 
+#### Custom schema configuration
+
+You can also configure custom schema mappings in `.nova/Configuration.json` manually, e.g.
+
+```json
+{
+  "yaml.schemas": {
+    "https://json.schemastore.org/lerna.json": "my-custom-lerna.json"
+    "https://json.schemastore.org/github-action.json": ["*-action.yml"],
+    "../some/relative/path.json": [
+      "app-config.json",
+      "app-config.*.json"
+    ]
+  }
+}
+```
+
+[More information →](https://github.com/redhat-developer/yaml-language-server#using-yamlschemas-settings)
+
+Where the key is a URL or path to the your JSON schema, and the value is a glob pattern or array of patterns of files to match against.
+
+> Currently, Nova doesn't support this type of configuration so it cannot be done in the **Project → Project Settings...** UI.
+
+#### Inline Schema Comments
+
+You can add this special comment at the top of your schema file to tell the Yaml Extension which schema to use:
+
+```yaml
+# yaml-language-server: $schema=<urlToTheSchema>
+```
+
+or with a relative path:
+
+```yaml
+# yaml-language-server: $schema=../relative/path/to/schema
+```
+
+or with an absolute path:
+
+```yaml
+# yaml-language-server: $schema=/absolute/path/to/schema
+```
+
+[More Information →](https://github.com/redhat-developer/yaml-language-server#using-inlined-schema)
+
 ### Custom tags
 
 [YAML tags](https://yaml.org/spec/1.2/spec.html#id2761292)
-let you programatically control the parsing of values in YAML files during parsing.
+let you programatically control the parsing of values in YAML files.
 For example, a tag could be used to unpack a secret:
 
 ```yaml
@@ -72,10 +88,10 @@ Yaml Extension needs to know about these tags so it can help with suggestions an
 You can define these globally or per-project inside of Nova.
 
 > **Note:** global and per-project custom tags are not merged.
-> If you have global tags you will need to duplicate them if you want per-project tags.
+> If you have global tags you will need to duplicate them if you want to use per-project tags.
 
 Each line of the configuration should be a separate tag you want to add.
-It can optionally have a type too, which Yaml Extension will check the value of.
+It can optionally have a type, which Yaml Extension will check the value of.
 
 The type can be either `scalar`, `mapping` or `sequence`,
 for more information, [look here](https://github.com/redhat-developer/yaml-language-server#adding-custom-tags).
@@ -100,33 +116,51 @@ Then go to **YAML** in the side bar and configure **Custom tags** there.
 
 ### Under the hood
 
-Yaml Extension runs the [redhat-developer/yaml-language-server](http://github.com/redhat-developer/yaml-language-server) Language Server which
-pulls down associations from `https://www.schemastore.org/api/json/catalog.json`
-and filters out the ones that aren't `yaml` or `yml`.
-When you open a YAML file, it sees if it is associated with a schema and if it is, it downloads the schema to do hover/validation/completions.
+Yaml Extension runs the [redhat-developer/yaml-language-server](http://github.com/redhat-developer/yaml-language-server)
+Language Server which pulls down associations from `https://www.schemastore.org/api/json/catalog.json`
+and filters out the ones that aren't YAML.
+When you open a YAML file,
+it sees if it is associated with a schema and if it is,
+it downloads the schema to do hover/validation/completions.
 
 ### Kubernetes
 
-To support Kubernetes resources, your files must be named in a certain way.
-Kubernetes files must be named or end with one of these suffixes:
+You can opt-in to Kubernetes support on a per-project basis.
+You need to manually configure your project's settings in `.nova/Configuration.json` to
+tell the Yaml Language Server which files you want it to consider to be Kubernetes ones.
 
-```
-deployment, deploy, configmap, cm, namespace, ns, persistentvolumeclaim, pvc,
-pod, po, secret, service, svc, serviceaccount, sa, daemonset, ds,
-cronjob, cj, job, ingress, ing
-```
+To help with this, there is the **Extensions → YAML → Setup Kubernetes Schemas** command to bootstrap the process.
+It will open your local `.nova/Configuration.json` and attempt to add a placeholder
+schema mapping towards the latest supported Kubernetes JSON schema.
 
-> These are based on the singular names from `kubectl api-resources`
+> **Warning** This command covers lots of cases for your existing (or non-existing project configuration)
+> but it will erase any previous `yaml.schemas` that you may have set.
+> If you have custom schemas setup, I'd recommend running the command in a blank project
+> and manually merging the JSON back together again.
 
-For example:
+The placeholder is setup to match suffixes based on the `kubectl api-resources` output,
+but you can customise this as much as you'd like.
+You can re-run the command to reset back to the placeholder.
+
+> Under the hood there is one generic Kubernetes schema which decides the structure
+> based on what `apiVersion` and `kind` are set to.
+> So you don't need to worry about mapping different schemas to different files.
+>
+> This schema is from [yannh/kubernetes-json-schema](https://github.com/yannh/kubernetes-json-schema/)
+> and the command picks the highest version that is known to work with the Language Server.
+
+The placeholder will match files like:
 
 - `deployment.yml`
 - `my-special-service.yaml`
 - `ingress.yml`
 - `app-cm.yaml`
-- [My test examples](https://github.com/robb-j/nova-yaml/tree/master/examples)
+- [The test examples](https://github.com/robb-j/nova-yaml/tree/master/examples)
 
-> Hopefully a future version of this extension will parse out the `apiVersion` and `kind` values and validate files dynamically based on them, but this currently isn't possible.
+> Hopefully a future version of this extension will parse out the `apiVersion` and `kind` values
+> and validate files dynamically based on them,
+> but this currently isn't possible.
+> This is being [tracked here](https://github.com/robb-j/nova-yaml/issues/21).
 
 ### Screenshots
 
@@ -136,6 +170,28 @@ For example:
 
 <img src="https://raw.githubusercontent.com/robb-j/nova-yaml/main/yaml.novaextension/Images/extension/completion.png" width="800" alt="See completion options as you write based on the JSON schema">
 
+## Permissions
+
+Yaml Extension requires these Nova permissions:
+
+- `network` Yaml Extension uses a network connection:
+  - to associate YAML files with json schemas
+  - to download individual json schemas to validate against
+  - to download the language server when you first install or subsequently update the extension.
+- `process` Yaml Extension runs these subprocess:
+  - to determine where Node.js is installed
+  - to install the language server with NPM
+  - to run the language server which provides most of the features
+- `filesystem` Yaml Extension needs to read and write files:
+  - to read in YAML files so they can be validated
+  - to write back to files when applying completions
+  - to install the language server in extension storage (`~/Library/Application Support/Nova/Extensions/robb-j.yaml`)
+  - when using the **Setup Kubernetes Schemas** command
+
+> This information is based on my experience setting up the language server (which I didn't write).
+> If you find it is doing something not described above please [fill out an Issue](https://github.com/robb-j/nova-yaml/issues),
+> I want this information to be as accurate and informative as possible.
+
 ## Install
 
 1. Select the **Extensions → Extension Library...** menu item
@@ -144,18 +200,13 @@ For example:
 
 ## Troubleshooting
 
-If believe something isn't working, you can try reloading the yaml server.
-Select the **Editor → YAML → Reload Yaml Server** menu item
+If believe something isn't working, you can try restarting the yaml server.
+Select the **Extensions → YAML → Restart Server** menu item
 
 If things seem really wrong, check the extension console to find out more information.
 Select the **Extensions → Show Extension Console** menu item, then pick the `Yaml` source.
 
-You should see a first log message of `Activating...` which is the first thing the extension does.
-If you don't see `Activated!`, there might have been issues with the NPM install.
-Try resetting the install lock by selecting the **Editor → YAML → Reset Yaml Install Lock**,
-this is most likely with multiple Nova windows open, so try again with a single workspace.
-
-If you see any other errors in that log that aren't like `Error: Invalid parameter: registrations`,
+If you see any errors in that log that aren't like `Error: Invalid parameter: registrations`,
 or the stack trace below that, please [fill out an Issue](https://github.com/robb-j/nova-yaml/issues).
 
 ## Known issues
@@ -167,5 +218,3 @@ or the stack trace below that, please [fill out an Issue](https://github.com/rob
 ## Disclaimer
 
 This repo does not provide the YAML syntax highlighting in Nova, those are provided by Panic.
-
----

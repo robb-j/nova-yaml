@@ -1,19 +1,19 @@
 import { YamlLanguageServer } from "../yaml-language-server";
 import { createDebug } from "../utils";
 
-const debug = createDebug("reload");
+const debug = createDebug("restart");
 
-export function reloadCommand(
+export async function restartCommand(
   workspace: Workspace,
   langServer: YamlLanguageServer | null
 ) {
-  debug("Reloading");
+  debug("Restarting");
 
   if (!langServer) {
     debug("LanguageServer not running");
     return;
   }
 
-  langServer.deactivate();
+  langServer.stop();
   langServer.start();
 }

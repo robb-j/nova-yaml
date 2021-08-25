@@ -2,16 +2,30 @@
   "workspace.color": 0,
   "workspace.name": "yaml",
   "yaml.customTags": ["!secret scalar"],
-  "yaml.schemas": {},
-  "yaml.validate": true,
-  "yaml.hover": true,
-  "yaml.completion": true,
-  "yaml.format": { "enable": true },
-
-  "[yaml].editor.insertSpaces": true,
-  "[yaml].editor.tabSize": 2,
-  "[yaml].editor.autoIndent": true,
-
-  "http.proxy": null,
-  "http.proxyStrictSSL": null
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.20.5-standalone-strict/all.json": [
+      "*deployment.yml",
+      "*deploy.yml",
+      "*configmap.yml",
+      "*cm.yml",
+      "*namespace.yml",
+      "*ns.yml",
+      "*persistentvolumeclaim.yml",
+      "*pvc.yml",
+      "*pod.yml",
+      "*po.yml",
+      "*secret.yml",
+      "*service.yml",
+      "*svc.yml",
+      "*serviceaccount.yml",
+      "*sa.yml",
+      "*daemonset.yml",
+      "*ds.yml",
+      "*cronjob.yml",
+      "*cj.yml",
+      "*job.yml",
+      "*ingress.yml",
+      "*ing.yml"
+    ]
+  }
 }

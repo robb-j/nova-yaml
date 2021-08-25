@@ -11,7 +11,11 @@
 
   "main": "main.dist.js",
 
-  "activationEvents": ["onLanguage:yaml", "onWorkspaceContains:*.yaml"],
+  "activationEvents": [
+    "onLanguage:yaml",
+    "onWorkspaceContains:*.yaml",
+    "onWorkspaceContains:*.yml"
+  ],
 
   "entitlements": {
     "process": true,
@@ -20,10 +24,15 @@
   },
 
   "commands": {
+    "editor": [],
     "extensions": [
       {
-        "command": "robb-j.yaml.reload",
-        "title": "Reload Yaml Server"
+        "command": "robb-j.yaml.generate-kube-schemas",
+        "title": "Setup Kubernetes Schemas"
+      },
+      {
+        "command": "robb-j.yaml.restart",
+        "title": "Restart Server"
       }
     ]
   },

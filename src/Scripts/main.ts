@@ -2,7 +2,8 @@
 // Extension entry point
 //
 
-import { reloadCommand } from "./commands/all";
+import { restartCommand } from "./commands/restart-command";
+import { generateKubeSchemasCommand } from "./commands/generate-kube-schemas";
 import { cleanupStorage, createDebug } from "./utils";
 import { YamlLanguageServer } from "./yaml-language-server";
 
@@ -25,6 +26,17 @@ export function deactivate() {
   }
 }
 
-nova.commands.register("robb-j.yaml.reload", (workspace: Workspace) =>
-  reloadCommand(workspace, langServer)
+function logErrors(error: Error) {
+  debug(error.message);
+  debug(error.stack);
+}
+
+nova.commands.register("robb-j.yaml.restart", (workspace: Workspace) =>
+  restartCommand(workspace, langServer).catch(logErrors)
+);
+
+nova.commands.register(
+  "robb-j.yaml.generate-kube-schemas",
+  (workspace: Workspace) =>
+    generateKubeSchemasCommand(workspace).catch(logErrors)
 );

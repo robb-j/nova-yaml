@@ -1,3 +1,16 @@
+## Version 1.2.0
+
+- Upgrade yaml-language-server to `0.22.0`, it was previously `0.19.2`,
+  see [yaml-language-server CHANGELOG](https://github.com/redhat-developer/yaml-language-server/blob/main/CHANGELOG.md#0220) for more.
+- **IMPORTANT** by-default support for Kubernetes schemas has been dropped.
+  I hope to be able to add this again in the future but it is not possible
+  with current versions of the yaml server and Nova.
+  See the [README.md](/yaml.novaextension/README.md) to see how to configure this now.
+- New command **Setup Kubernetes Schemas** to help configure Kubernetes schema
+  in the new way, as per above.
+- Lots of internals of the server have been refactored,
+  but this shouldn't be a noticeable change.
+
 ## Version 1.1.1
 
 **Tweaks**
