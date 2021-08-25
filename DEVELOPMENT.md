@@ -14,6 +14,18 @@ For extension information go to [./yaml.novaextension](/yaml.novaextension)
 - https://docs.nova.app/api-reference/language-client/#supported-language-server-transport-types
 - https://github.com/redhat-developer/yaml-language-server/issues/129
 
+## release process
+
+1. Ensure git is clean
+2. Ensure the `CHANGELOG.md` is up-to-date
+3. Generate new screenshots if needed
+4. Run the build
+5. Bump the version in extension.json
+6. Commit as `X.Y.Z`
+7. Tag the commit as `vX.Y.Z`
+8. Remove `yaml.novaextension/node_modules`
+9. **Extensions → Submit to the Extension Library...**
+
 ## design goals
 
 - be open about what the extension does / how it uses its entitlements
