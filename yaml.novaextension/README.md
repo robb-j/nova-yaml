@@ -214,6 +214,7 @@ or the stack trace below that, please [fill out an Issue](https://github.com/rob
 - Indentation on completions can be incorrect
 - `Error: Invalid parameter: registrations` in the extension console
   - This causes a node.js unhandled promise rejection which is forced to "warn" rather than crash the server
+  - The issue is being [tracked here](https://github.com/robb-j/nova-yaml/issues/4)
 
 ## Disclaimer
 
