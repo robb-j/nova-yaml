@@ -16,15 +16,16 @@ For extension information go to [./yaml.novaextension](/yaml.novaextension)
 
 ## release process
 
-1. Ensure git is clean
-2. Ensure the `CHANGELOG.md` is up-to-date
-3. Generate new screenshots if needed
-4. Run the build
-5. Bump the version in extension.json
-6. Commit as `X.Y.Z`
-7. Tag the commit as `vX.Y.Z`
-8. Remove `yaml.novaextension/node_modules`
-9. **Extensions → Submit to the Extension Library...**
+- Ensure git is clean
+- Ensure the `CHANGELOG.md` is up-to-date
+- Generate new screenshots if needed
+- Make sure `DEBUG_LOGS` is `false`
+- Run the build
+- Bump the version in extension.json
+- Commit as `X.Y.Z`
+- Tag the commit as `vX.Y.Z`
+- Remove `yaml.novaextension/node_modules`
+- **Extensions → Submit to the Extension Library...**
 
 ## design goals
 
