@@ -9,7 +9,7 @@ const debug = createDebug("yaml-language-server");
 const DEBUG_INSPECT = false;
 
 // Log stdin and stdout of the server to local files
-const DEBUG_LOGS = true;
+const DEBUG_LOGS = false;
 
 export class YamlLanguageServer {
   languageClient: LanguageClient | null = null;
