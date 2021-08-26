@@ -1,3 +1,10 @@
+## Version 1.2.1
+
+**Fixes**
+
+- Stopped creating `stdin.log` and `stdout.log` files in your projects, sorry!
+  Please remove these files.
+
 ## Version 1.2.0
 
 - Upgrade yaml-language-server to `0.22.0`, it was previously `0.19.2`,
