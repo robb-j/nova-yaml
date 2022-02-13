@@ -3,6 +3,45 @@
 These are my development notes on this extension.
 For extension information go to [./yaml.novaextension](/yaml.novaextension)
 
+## setup
+
+To work on the extension, you will need to have [Node.js](https://nodejs.org/en/) (version 16+)
+and [Nova](https://nova.app) installed on your development machine. Then run:
+
+```sh
+# cd to/this/folder
+
+# install NPM dependencies
+npm install
+```
+
+## regular use
+
+For development, use the `Development` task to build and run the extension locally.
+**Build** will compile the TypeScript into JavaScript into the extension folder.
+**Run** will do the build, install bundled dependencies and activate the extension in Nova.
+Nova will run the extension locally and restart when and file inside the `.novaextension` changes,
+i.e. by running the **Build** task.
+
+> Make sure to disable the extension if a published version is already installed.
+
+When in development mode, the extension outputs extra information to the Debug Pane,
+which can be shown with **View** → **Show Debug Pane**.
+
+Use the files in the [examples](/examples) folder to test out different features of the language server.
+
+## code formatting
+
+This repository uses [Prettier](https://prettier.io/),
+[yorkie](https://www.npmjs.com/package/yorkie)
+and [lint-staged](https://www.npmjs.com/package/lint-staged) to
+automatically format code when staging code git commits.
+
+You can manually run the formatter with `npm run format` if you want.
+
+Prettier ignores files using [.prettierignore](/.prettierignore)
+or specific lines after a `// prettier-ignore` comment.
+
 ## helpful links
 
 - https://library.panic.com/nova/incorporating-tasks/

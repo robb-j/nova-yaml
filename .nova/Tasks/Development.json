@@ -2,11 +2,11 @@
   "actions" : {
     "build" : {
       "enabled" : true,
-      "script" : ".\/bin\/build.sh"
+      "path" : "bin\/build.sh"
     },
     "run" : {
       "enabled" : true,
-      "script" : "#!\/bin\/sh\nnova extension activate ."
+      "path" : "bin\/run.sh"
     }
   },
   "buildBeforeRunning" : true,
