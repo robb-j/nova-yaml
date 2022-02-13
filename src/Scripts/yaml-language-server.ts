@@ -1,4 +1,4 @@
-import { console, createDebug, execute, findBinaryPath } from "./utils";
+import { createDebug, execute, findBinaryPath, logError } from "./utils";
 
 type ServerOptions = ConstructorParameters<typeof LanguageClient>[2];
 type ClientOptions = ConstructorParameters<typeof LanguageClient>[3];
@@ -40,11 +40,13 @@ export class YamlLanguageServer {
         ? nova.extension.path
         : nova.extension.globalStoragePath;
 
-      const { stdout: installLogs } = await execute("/usr/bin/env", {
-        args: ["npm", "install", "--no-audit", "--only=production"],
-        cwd: packageDir,
-      });
-      debug(installLogs.trim());
+      if (!nova.inDevMode()) {
+        const { stdout: installLogs } = await execute("/usr/bin/env", {
+          args: ["npm", "install", "--no-audit", "--only=production"],
+          cwd: packageDir,
+        });
+        debug(installLogs.trim());
+      }
 
       const serverOptions = await this.getServerOptions(
         packageDir,
@@ -73,9 +75,7 @@ export class YamlLanguageServer {
 
       this.startLanguageServer(client);
     } catch (error) {
-      console.error("LanguageServer Failed", error.message);
-      console.error(error.message);
-      console.error(error.stack);
+      logError("LanguageServer Failed", error);
     }
   }
 

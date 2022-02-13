@@ -4,7 +4,7 @@
 
 import { restartCommand } from "./commands/restart-command";
 import { generateKubeSchemasCommand } from "./commands/generate-kube-schemas";
-import { cleanupStorage, createDebug } from "./utils";
+import { cleanupStorage, createDebug, logError } from "./utils";
 import { YamlLanguageServer } from "./yaml-language-server";
 
 const debug = createDebug("main");
@@ -26,17 +26,16 @@ export function deactivate() {
   }
 }
 
-function logErrors(error: Error) {
-  debug(error.message);
-  debug(error.stack);
+function errorHandler(error: Error) {
+  logError("A command failed", error);
 }
 
 nova.commands.register("robb-j.yaml.restart", (workspace: Workspace) =>
-  restartCommand(workspace, langServer).catch(logErrors)
+  restartCommand(workspace, langServer).catch(errorHandler)
 );
 
 nova.commands.register(
   "robb-j.yaml.generate-kube-schemas",
   (workspace: Workspace) =>
-    generateKubeSchemasCommand(workspace).catch(logErrors)
+    generateKubeSchemasCommand(workspace).catch(errorHandler)
 );
