@@ -1,3 +1,10 @@
+## Version 1.3.0
+
+**Features**
+
+- Upgrade yaml-language-server to `1.4.0` from `0.22.0`,
+  see [yaml-language-server CHANGELOG](https://github.com/redhat-developer/yaml-language-server/blob/main/CHANGELOG.md#140) for more.
+
 ## Version 1.2.1
 
 **Fixes**
