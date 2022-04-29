@@ -6,7 +6,7 @@ type ClientOptions = ConstructorParameters<typeof LanguageClient>[3];
 const debug = createDebug("yaml-language-server");
 
 // Start the server with --inspect-brk
-const DEBUG_INSPECT = false;
+const DEBUG_INSPECT = nova.inDevMode() && false;
 
 // Log stdin and stdout of the server to local files
 const DEBUG_LOGS = nova.inDevMode() && false;
@@ -28,13 +28,9 @@ export class YamlLanguageServer {
 
   async start() {
     try {
-      debug("#start");
+      this.stop();
 
-      if (this.languageClient) {
-        this.languageClient.stop();
-        nova.subscriptions.remove(this.languageClient as any);
-        this.languageClient = null;
-      }
+      debug("#start");
 
       const packageDir = nova.inDevMode()
         ? nova.extension.path
@@ -61,7 +57,7 @@ export class YamlLanguageServer {
 
       const client = new LanguageClient(
         "robb-j.yaml",
-        nova.extension.name,
+        "YAML LanguageServer",
         serverOptions,
         clientOptions
       );
@@ -80,12 +76,13 @@ export class YamlLanguageServer {
   }
 
   stop() {
-    debug("#stop");
-
     if (this.languageClient) {
+      debug("#stop");
       this.languageClient.stop();
       nova.subscriptions.remove(this.languageClient as any);
       this.languageClient = null;
+    } else {
+      debug("#stop (not running)");
     }
   }
 
@@ -94,18 +91,29 @@ export class YamlLanguageServer {
   //
 
   startLanguageServer(client: LanguageClient) {
-    // client.onRequest("custom/schema/request", (file) => {
-    //   debug("custom/schema/request", file);
-    //   return [];
-    // });
+    client.onRequest("custom/schema/request", ([uri]: [string]) => {
+      debug("custom/schema/request", uri);
+      const editor = nova.workspace.textEditors.find(
+        (e) => e.document.uri === uri
+      );
+      if (!editor) return [];
+
+      const text = editor.document.getTextInRange(
+        new Range(0, editor.document.length)
+      );
+
+      const apiVersion = /^apiVersion: +(\S+)$/m.exec(text);
+      const kind = /^kind: +(\S+)$/m.exec(text);
+
+      if (!apiVersion || !kind) return [];
+
+      debug("custom/schema/request", [apiVersion[1], kind[1]]);
+      return [{ uri: "kubernetes", name: kind[1], description: apiVersion[1] }];
+    });
 
     client.start();
 
-    // client.sendNotification("yaml/registerCustomSchemaRequest");
-
-    // client.sendNotification("workspace/didChangeConfiguration", {
-    //   settings: this.getConfig(),
-    // });
+    client.sendNotification("yaml/registerCustomSchemaRequest");
   }
 
   async getServerOptions(
