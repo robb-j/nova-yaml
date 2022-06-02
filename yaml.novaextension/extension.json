@@ -11,11 +11,7 @@
 
   "main": "main.dist.js",
 
-  "activationEvents": [
-    "onLanguage:yaml",
-    "onWorkspaceContains:*.yaml",
-    "onWorkspaceContains:*.yml"
-  ],
+  "activationEvents": ["onLanguage:yaml"],
 
   "entitlements": {
     "process": true,
