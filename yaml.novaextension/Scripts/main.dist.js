@@ -263,7 +263,7 @@ var YamlLanguageServer = class {
         };
         debug3("serverOptions", serverOptions);
         debug3("clientOptions", clientOptions);
-        const client = new LanguageClient("robb-j.yaml", nova.extension.name, serverOptions, clientOptions);
+        const client = new LanguageClient("robb-j.yaml", "Yaml Language Server", serverOptions, clientOptions);
         nova.subscriptions.add(client);
         this.languageClient = client;
         client.onDidStop((err) => {

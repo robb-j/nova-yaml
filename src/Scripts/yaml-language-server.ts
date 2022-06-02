@@ -65,7 +65,7 @@ export class YamlLanguageServer {
 
       const client = new LanguageClient(
         "robb-j.yaml",
-        nova.extension.name,
+        "Yaml Language Server",
         serverOptions,
         clientOptions
       );
