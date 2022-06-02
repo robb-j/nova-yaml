@@ -1,9 +1,14 @@
 {
-  "workspace.color": 0,
-  "workspace.name": "yaml",
-  "yaml.customTags": ["!secret scalar"],
-  "yaml.schemas": {
-    "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.20.5-standalone-strict/all.json": [
+  "index.ignored_file_patterns" : [
+    "yaml.novaextension\/Scripts"
+  ],
+  "workspace.color" : 0,
+  "workspace.name" : "yaml",
+  "yaml.customTags" : [
+    "!secret scalar"
+  ],
+  "yaml.schemas" : {
+    "https:\/\/raw.githubusercontent.com\/yannh\/kubernetes-json-schema\/master\/v1.20.5-standalone-strict\/all.json" : [
       "*deployment.yml",
       "*deploy.yml",
       "*configmap.yml",

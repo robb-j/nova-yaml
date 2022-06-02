@@ -6,7 +6,7 @@ type ClientOptions = ConstructorParameters<typeof LanguageClient>[3];
 const debug = createDebug("yaml-language-server");
 
 // Start the server with --inspect-brk
-const DEBUG_INSPECT = false;
+const DEBUG_INSPECT = nova.inDevMode() && false;
 
 // Log stdin and stdout of the server to local files
 const DEBUG_LOGS = nova.inDevMode() && false;

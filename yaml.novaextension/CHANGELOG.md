@@ -1,3 +1,13 @@
+## Version 1.4.0
+
+**Features**
+
+- Improve the experience when the extension cannot find Node.js / npm.
+  There's a new notification to tell you what happened and it links to a new readme section to help out.
+- All compiled code is now Open Source, if you fancy diving in to see what Yaml Extension is up to, [you can](https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension/Scripts)
+- Upgrade yaml-language-server to `1.7.0` from `1.4.0`,
+  see [yaml-language-server CHANGELOG](https://github.com/redhat-developer/yaml-language-server/blob/main/CHANGELOG.md#170) for more.
+
 ## Version 1.3.0
 
 **Features**
