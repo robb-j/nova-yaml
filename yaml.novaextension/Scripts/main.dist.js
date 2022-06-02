@@ -241,20 +241,9 @@ var YamlLanguageServer = class {
     return __async(this, null, function* () {
       try {
         debug3("#start");
-        const nodePath = yield findBinaryPath("node");
-        debug3("nodePath", nodePath);
-        if (!nodePath) {
-          const msg = new NotificationRequest("node-js-not-found");
-          msg.title = "Node.js not found";
-          msg.body = "Yaml Extension requires Node.js to be installed on your computer for it to work. See the extension readme for instructions and help.";
-          msg.actions = [nova.localize("OK"), nova.localize("Open Readme")];
-          nova.notifications.add(msg).then((response) => {
-            if (response.actionIdx !== 1)
-              return;
-            nova.openURL("https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements");
-          }).catch((error) => logError("Notification failed", error));
+        const nodePath = yield this.getNodeJsPath();
+        if (!nodePath)
           return;
-        }
         if (this.languageClient) {
           this.languageClient.stop();
           nova.subscriptions.remove(this.languageClient);
@@ -293,6 +282,24 @@ var YamlLanguageServer = class {
       nova.subscriptions.remove(this.languageClient);
       this.languageClient = null;
     }
+  }
+  getNodeJsPath() {
+    return __async(this, null, function* () {
+      const nodePath = yield findBinaryPath("node");
+      debug3("nodePath", nodePath);
+      if (!nodePath) {
+        const msg = new NotificationRequest("node-js-not-found");
+        msg.title = "Node.js not found";
+        msg.body = "Yaml Extension requires Node.js and npm to be installed on your computer for it to work. See the extension readme for instructions and help.";
+        msg.actions = [nova.localize("OK"), nova.localize("Open Readme")];
+        nova.notifications.add(msg).then((response) => {
+          if (response.actionIdx !== 1)
+            return;
+          nova.openURL("https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements");
+        }).catch((error) => logError("Notification failed", error));
+      }
+      return nodePath;
+    });
   }
   startLanguageServer(client) {
     client.start();

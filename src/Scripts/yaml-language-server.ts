@@ -30,6 +30,9 @@ export class YamlLanguageServer {
     try {
       debug("#start");
 
+      const nodePath = await this.getNodeJsPath();
+      if (!nodePath) return;
+
       if (this.languageClient) {
         this.languageClient.stop();
         nova.subscriptions.remove(this.languageClient as any);
@@ -49,6 +52,7 @@ export class YamlLanguageServer {
       }
 
       const serverOptions = await this.getServerOptions(
+        nodePath,
         packageDir,
         DEBUG_LOGS ? nova.workspace.path : null
       );
@@ -93,6 +97,31 @@ export class YamlLanguageServer {
   // Internal
   //
 
+  async getNodeJsPath() {
+    const nodePath = await findBinaryPath("node");
+    debug("nodePath", nodePath);
+
+    if (!nodePath) {
+      const msg = new NotificationRequest("node-js-not-found");
+      msg.title = "Node.js not found";
+      msg.body =
+        "Yaml Extension requires Node.js and npm to be installed on your computer for it to work. See the extension readme for instructions and help.";
+      msg.actions = [nova.localize("OK"), nova.localize("Open Readme")];
+
+      nova.notifications
+        .add(msg)
+        .then((response) => {
+          if (response.actionIdx !== 1) return;
+          nova.openURL(
+            "https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements"
+          );
+        })
+        .catch((error) => logError("Notification failed", error));
+    }
+
+    return nodePath;
+  }
+
   startLanguageServer(client: LanguageClient) {
     // client.onRequest("custom/schema/request", (file) => {
     //   debug("custom/schema/request", file);
@@ -109,6 +138,7 @@ export class YamlLanguageServer {
   }
 
   async getServerOptions(
+    nodePath: string,
     packageDir: string,
     debugPath: string | null
   ): Promise<ServerOptions> {
@@ -121,13 +151,6 @@ export class YamlLanguageServer {
 
     if (DEBUG_INSPECT) {
       nodeArgs.push("--inspect-brk=9231", "--trace-warnings");
-    }
-
-    const nodePath = await findBinaryPath("node");
-    debug("nodePath", nodePath);
-
-    if (!nodePath) {
-      throw new Error("Node.js not installed on your $PATH");
     }
 
     if (debugPath) {
