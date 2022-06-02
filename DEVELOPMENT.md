@@ -18,10 +18,10 @@ npm install
 ## regular use
 
 For development, use the `Development` task to build and run the extension locally.
-**Build** will compile the TypeScript into JavaScript into the extension folder.
-**Run** will do the build, install bundled dependencies and activate the extension in Nova.
+**Build** will compile the TypeScript into JavaScript into the extension folder and install bundled dependencies.
+Use **Extensions → Activate Project as Extension** to run the extension.
 Nova will run the extension locally and restart when any file inside the `.novaextension` changes,
-i.e. by running the **Build** task.
+i.e. by running the **Build** task again.
 
 > Make sure to disable the extension if a published version is already installed.
 

@@ -6,6 +6,9 @@ set -e
 # Lint TypeScript source code
 npx tsc --noEmit --pretty
 
+# Install extension dependencies
+npm --prefix yaml.novaextension i --no-audit
+
 # Bundle into JavaScript
 npx esbuild \
   --bundle \
