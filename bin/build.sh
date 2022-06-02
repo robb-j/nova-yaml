@@ -10,6 +10,8 @@ npx tsc --noEmit --pretty
 npm --prefix yaml.novaextension i --no-audit
 
 # Bundle into JavaScript
+# for no-node-js testing use: 
+# ./node_modules/.bin/esbuild \
 npx esbuild \
   --bundle \
   --format=cjs \
