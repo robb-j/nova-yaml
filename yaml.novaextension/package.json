@@ -3,6 +3,6 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "yaml-language-server": "^1.7.0"
+    "yaml-language-server": "^1.8.0"
   }
 }
