@@ -1,3 +1,11 @@
+## Version 1.4.1
+
+**Fixes**
+
+- Add an error message when installing the language server fails.
+- Upgrade yaml-language-server to `1.8.0` from `1.7.0`,
+  see [yaml-language-server CHANGELOG](https://github.com/redhat-developer/yaml-language-server/blob/main/CHANGELOG.md#180) for more.
+
 ## Version 1.4.0
 
 **Features**

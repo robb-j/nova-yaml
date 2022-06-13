@@ -1,6 +1,6 @@
 {
   "index.ignored_file_patterns" : [
-    "yaml.novaextension\/Scripts"
+    "yaml.novaextension\/Scripts\/*.js"
   ],
   "workspace.color" : 0,
   "workspace.name" : "yaml",
