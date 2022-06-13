@@ -7,14 +7,15 @@
   "devDependencies": {
     "@types/nova-editor-node": "^4.1.4",
     "@types/whatwg-fetch": "0.0.33",
-    "esbuild": "^0.14.21",
-    "lint-staged": "^12.3.3",
-    "prettier": "^2.5.1",
+    "esbuild": "^0.14.43",
+    "lint-staged": "^13.0.1",
+    "prettier": "^2.6.2",
     "ts-jest": "^26.5.6",
-    "typescript": "^4.5.5",
-    "vscode-languageserver-protocol": "^3.16.0",
+    "typescript": "^4.7.3",
+    "vscode-languageserver-protocol": "^3.17.1",
     "yorkie": "^2.0.0"
   },
+  "sideEffects": false,
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
