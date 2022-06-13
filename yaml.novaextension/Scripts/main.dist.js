@@ -49,7 +49,7 @@ __export(main_exports, {
 });
 
 // src/Scripts/utils.ts
-var console = globalThis.console;
+var console2 = globalThis.console;
 function execute(path, options) {
   return new Promise((resolve) => {
     const process = new Process(path, options);
@@ -70,7 +70,7 @@ function createDebug(namespace) {
     if (!nova.inDevMode())
       return;
     const humanArgs = args.map((arg) => typeof arg === "object" ? JSON.stringify(arg) : arg);
-    console.info(`${namespace}:`, ...humanArgs);
+    console2.info(`${namespace}:`, ...humanArgs);
   };
 }
 function cleanupStorage() {
@@ -99,13 +99,13 @@ function askChoice(workspace, placeholder, choices) {
   });
 }
 function logError(message, error) {
-  console.error(message);
+  console2.error(message);
   if (error instanceof Error) {
-    console.error(error.message);
-    console.error(error.stack);
+    console2.error(error.message);
+    console2.error(error.stack);
   } else {
-    console.error("An non-error was thrown");
-    console.error(error);
+    console2.error("An non-error was thrown");
+    console2.error(error);
   }
 }
 
@@ -250,13 +250,9 @@ var YamlLanguageServer = class {
           this.languageClient = null;
         }
         const packageDir = nova.inDevMode() ? nova.extension.path : nova.extension.globalStoragePath;
-        if (!nova.inDevMode()) {
-          const { stdout: installLogs } = yield execute("/usr/bin/env", {
-            args: ["npm", "install", "--no-audit", "--only=production"],
-            cwd: packageDir
-          });
-          debug3(installLogs.trim());
-        }
+        const isInstalled = yield this.installPackages(packageDir);
+        if (!isInstalled)
+          return;
         const serverOptions = yield this.getServerOptions(nodePath, packageDir, DEBUG_LOGS ? nova.workspace.path : null);
         const clientOptions = {
           syntaxes: ["yaml"]
@@ -283,22 +279,49 @@ var YamlLanguageServer = class {
       this.languageClient = null;
     }
   }
+  installPackages(installDir) {
+    return __async(this, null, function* () {
+      if (nova.inDevMode())
+        return true;
+      debug3("#installPackages", installDir);
+      const proc = new Process("/usr/bin/env", {
+        args: ["npm", "install", "--no-audit", "--only=production"],
+        cwd: installDir
+      });
+      proc.onStdout((line) => debug3("npm install: " + line));
+      proc.onStderr((line) => console.error("ERROR(npm install): " + line));
+      proc.start();
+      const success = yield new Promise((resolve) => {
+        proc.onDidExit((status) => resolve(status === 0));
+      });
+      if (success)
+        return true;
+      const msg = new NotificationRequest("npm-install-failed");
+      msg.title = nova.localize("npm-install-failed-title");
+      msg.body = nova.localize("npm-install-failed-body");
+      msg.actions = [nova.localize("ok"), nova.localize("submit-bug")];
+      const response = yield nova.notifications.add(msg).catch((error) => logError("Notification failed", error));
+      if ((response == null ? void 0 : response.actionIdx) === 1) {
+        nova.openURL("https://github.com/robb-j/nova-yaml/issues");
+      }
+      return false;
+    });
+  }
   getNodeJsPath() {
     return __async(this, null, function* () {
       const nodePath = yield findBinaryPath("node");
       debug3("nodePath", nodePath);
-      if (!nodePath) {
-        const msg = new NotificationRequest("node-js-not-found");
-        msg.title = "Node.js not found";
-        msg.body = "Yaml Extension requires Node.js and npm to be installed on your computer for it to work. See the extension readme for instructions and help.";
-        msg.actions = [nova.localize("OK"), nova.localize("Open Readme")];
-        nova.notifications.add(msg).then((response) => {
-          if (response.actionIdx !== 1)
-            return;
-          nova.openURL("https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements");
-        }).catch((error) => logError("Notification failed", error));
+      if (nodePath)
+        return nodePath;
+      const msg = new NotificationRequest("node-js-not-found");
+      msg.title = nova.localize("node-not-found-title");
+      msg.body = nova.localize("node-not-found-body");
+      msg.actions = [nova.localize("ok"), nova.localize("open-readme")];
+      const response = yield nova.notifications.add(msg).catch((error) => logError("Notification failed", error));
+      if ((response == null ? void 0 : response.actionIdx) === 1) {
+        nova.openURL("https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements");
       }
-      return nodePath;
+      return null;
     });
   }
   startLanguageServer(client) {

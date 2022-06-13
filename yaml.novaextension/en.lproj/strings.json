@@ -1,0 +1,11 @@
+{
+  "npm-install-failed-title": "Language Server install failed",
+  "npm-install-failed-body": "Yaml Extension could not use \"npm\" to install the language server. Open \"View → Sidebars → Show Debug Sidebar\" to see the exact error and submit a bug report.",
+
+  "node-not-found-title": "Node.js not found",
+  "node-not-found-body": "Yaml Extension requires Node.js and npm to be installed on your computer. See the extension readme for instructions and help. Re-activate the extension to try again.",
+
+  "ok": "OK",
+  "submit-bug": "Submit Bug",
+  "open-readme": "Open Readme"
+}
