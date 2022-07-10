@@ -6,3 +6,4 @@ A YAML language server/client for [Nova IDE](https://nova.app).
 - [Extension README.md →](/yaml.novaextension)
 - [Extension CHANGELOG.md →](/yaml.novaextension/CHANGELOG.md)
 - [Development notes →](/DEVELOPMENT.md)
+- [Language Server →](https://github.com/redhat-developer/yaml-language-server)
