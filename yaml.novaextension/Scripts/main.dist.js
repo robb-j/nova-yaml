@@ -220,7 +220,7 @@ function parseJson(input) {
 }
 
 // src/Scripts/yaml-language-server.ts
-var debug3 = createDebug("yaml-language-server");
+var debug3 = createDebug("language-server");
 var DEBUG_INSPECT = nova.inDevMode() && false;
 var DEBUG_LOGS = nova.inDevMode() && false;
 var YamlLanguageServer = class {

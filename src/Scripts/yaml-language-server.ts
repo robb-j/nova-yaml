@@ -3,7 +3,7 @@ import { createDebug, findBinaryPath, logError } from "./utils";
 type ServerOptions = ConstructorParameters<typeof LanguageClient>[2];
 type ClientOptions = ConstructorParameters<typeof LanguageClient>[3];
 
-const debug = createDebug("yaml-language-server");
+const debug = createDebug("language-server");
 
 // Start the server with --inspect-brk
 const DEBUG_INSPECT = nova.inDevMode() && false;
