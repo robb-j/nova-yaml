@@ -2,9 +2,6 @@ import { createDebug, askChoice } from "../utils";
 
 const debug = createDebug("generate-kube-schemas");
 
-const K8S_SCHEMA_URL =
-  "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.20.5-standalone-strict/all.json";
-
 // prettier-ignore
 const keywords = [
   "deployment", "deploy", "configmap", "cm", "namespace", "ns",
@@ -59,7 +56,7 @@ function getFormattedSchemaLines(extension: string) {
   // Generate new lines of formatted JSON to be inserted
   return [
     '  "yaml.schemas": {',
-    `    "${K8S_SCHEMA_URL}": [`,
+    `    "kubernetes": [`,
     mappedKeywords,
     "    ]",
     "  }",

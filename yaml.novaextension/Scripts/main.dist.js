@@ -132,7 +132,7 @@ function restartCommand(_workspace, langServer2) {
 
 // src/Scripts/commands/generate-kube-schemas.ts
 var debug2 = createDebug("generate-kube-schemas");
-var K8S_SCHEMA_URL = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.20.5-standalone-strict/all.json";
+var K8S_SCHEMA_URL = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json";
 var keywords = [
   "deployment",
   "deploy",
@@ -243,7 +243,7 @@ function parseJson(input) {
 // src/Scripts/yaml-language-server.ts
 var debug3 = createDebug("language-server");
 var DEBUG_INSPECT = nova.inDevMode() && false;
-var DEBUG_LOGS = nova.inDevMode() && true;
+var DEBUG_LOGS = nova.inDevMode() && false;
 var YamlLanguageServer = class {
   constructor() {
     this.languageClient = null;
