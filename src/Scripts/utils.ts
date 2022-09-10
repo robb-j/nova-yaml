@@ -5,9 +5,6 @@
 export type ProcessParams = ConstructorParameters<typeof Process>;
 export type ProcessOutput = { stdout: string; stderr: string; status: number };
 
-// @types/nova-editor doesn't seem to have a console
-export const console: Console = (globalThis as any).console;
-
 /**
  * Run a non-interactive process and get the stdout, stderr & status in one go
  * @param {ProcessParams[0]} path The path to the binary to run
