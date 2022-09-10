@@ -8,13 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
       - name: install dependencies
-        run: |
-          npm ci
-        env:
-          CI: true
+        run: npm ci
       - name: run the build
-        run: |
-          ./bin/build.sh
+        run: ./bin/build.sh
