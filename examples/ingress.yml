@@ -2,7 +2,7 @@
 # This file tests an Kubernetes ingress
 #
 
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sample-ingress
@@ -10,14 +10,18 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     ingress.kubernetes.io/ssl-redirect: "true"
 spec:
+  ingressClassName: nginx
   rules:
     - host: example.com
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: sample-service
-              servicePort: 80
+              service:
+                name: sample-service
+                port:
+                  number: 80
   tls:
     - hosts:
         - example.com
