@@ -38,11 +38,11 @@ You can also configure custom schema mappings in `.nova/Configuration.json` manu
 ```json
 {
   "yaml.schemas": {
-    "https://json.schemastore.org/lerna.json": "my-custom-lerna.json"
+    "https://json.schemastore.org/lerna.json": "my-custom-lerna.yaml"
     "https://json.schemastore.org/github-action.json": ["*-action.yml"],
     "../some/relative/path.json": [
-      "app-config.json",
-      "app-config.*.json"
+      "app-config.yml",
+      "app-config.*.yml"
     ]
   }
 }
@@ -176,19 +176,24 @@ The placeholder will match files like:
 
 Yaml Extension requires these Nova permissions:
 
-- `network` Yaml Extension uses a network connection:
-  - to associate YAML files with json schemas
-  - to download individual json schemas to validate against
-  - to download the language server when you first install or subsequently update the extension.
-- `process` Yaml Extension runs these subprocess:
-  - to determine where Node.js is installed
-  - to install the language server with NPM
-  - to run the language server which provides most of the features
-- `filesystem` Yaml Extension needs to read and write files:
-  - to read in YAML files so they can be validated
-  - to write back to files when applying completions
-  - to install the language server in extension storage (`~/Library/Application Support/Nova/Extensions/robb-j.yaml`)
-  - when using the **Setup Kubernetes Schemas** command
+**network**:
+
+- to associate YAML files with json schemas
+- to download individual json schemas to validate against
+- to download the language server when you first install or subsequently update the extension.
+
+**process**:
+
+- to determine where Node.js is installed
+- to install the language server with NPM
+- to run the language server which provides most of the features
+
+**filesystem**:
+
+- to read in YAML files so they can be validated
+- to write back to files when applying completions
+- to install the language server in extension storage (`~/Library/Application Support/Nova/Extensions/robb-j.yaml`)
+- when using the **Setup Kubernetes Schemas** command
 
 > This information is based on my experience setting up the language server (which I didn't write).
 > If you find it is doing something not described above please [fill out an Issue](https://github.com/robb-j/nova-yaml/issues),
@@ -214,9 +219,6 @@ or the stack trace below that, please [fill out an Issue](https://github.com/rob
 ## Known issues
 
 - Indentation on completions can be incorrect
-- `Error: Invalid parameter: registrations` in the extension console
-  - This causes a node.js unhandled promise rejection which is forced to "warn" rather than crash the server
-  - The issue is being [tracked here](https://github.com/robb-j/nova-yaml/issues/4)
 
 ## Disclaimer
 
