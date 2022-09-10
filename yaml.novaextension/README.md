@@ -173,6 +173,10 @@ The placeholder will match files like:
 
 <img src="https://raw.githubusercontent.com/robb-j/nova-yaml/main/yaml.novaextension/Images/extension/completion.png" width="800" alt="See completion options as you write based on the JSON schema">
 
+### Advanced configuration
+
+The underlying Language Server provides more configuration which you can use by editing the `.nova/Configuration.json` file in your project. Details of these options can be [found here](https://github.com/redhat-developer/yaml-language-server#language-server-settings).
+
 ## Permissions
 
 Yaml Extension requires these Nova permissions:
