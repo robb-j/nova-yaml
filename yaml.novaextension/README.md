@@ -7,13 +7,14 @@ and validating against known JSON schemas, including Kubernetes resources.
 
 Yaml Extension requires some additional tools to be installed on your Mac:
 
-- [Node.js 12](https://nodejs.org) and NPM 5.2.0 or newer
+- [Node.js 16](https://nodejs.org) and NPM 6 or newer
   - Node.js is used to run [redhat-developer/yaml-language-server](http://github.com/redhat-developer/yaml-language-server)
   - NPM is used to install the server during extension installation
+  - Older versions of Node.js and NPM should still work, but newer versions are advised.
 
 To install the current stable version of Node, click the "Recommended for Most Users" button to begin the download. When that's done, double-click the **.pkg** installer to begin installation.
 
-**Node version managers** — If you use something like [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), make sure it is configured inside your profile file (`.zprofile` or `.bash_profile`) instead of your rc file (`.zshrc` or `.bashrc`). See [Environment Variables](https://help.panic.com/nova/environment-variables/) for more. You may also have to restart Nova for any changes to take effect.
+**Node version managers** — If you use something like [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), make sure it is configured inside your profile file (`.zprofile` or `.bash_profile`) instead of your "rc" file (`.zshrc` or `.bashrc`). See [Environment Variables](https://help.panic.com/nova/environment-variables/) for more. You may also have to restart Nova for any changes to take effect.
 
 ## Usage
 
