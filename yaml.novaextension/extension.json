@@ -35,25 +35,11 @@
 
   "config": [
     {
-      "key": "yaml.format.enable",
-      "title": "Format",
-      "type": "boolean",
-      "default": false,
-      "description": "Whether to format YAML documents or not"
-    },
-    {
-      "key": "yaml.validate",
-      "title": "Validate",
-      "type": "boolean",
-      "default": true,
-      "description": "Whether to validate YAML documents or not"
-    },
-    {
       "key": "yaml.hover",
       "title": "Hover",
       "type": "boolean",
       "default": true,
-      "description": "Whether to show on-hover toolips"
+      "description": "Whether to show on-hover toolips or not"
     },
     {
       "key": "yaml.completion",
