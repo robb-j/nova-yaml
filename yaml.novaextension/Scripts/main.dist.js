@@ -1,3 +1,4 @@
+"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -53,11 +54,13 @@ function execute(path, options) {
     process.onStdout((line) => stdout.push(line));
     const stderr = [];
     process.onStderr((line) => stderr.push(line));
-    process.onDidExit((status) => resolve({
-      status,
-      stderr: stderr.join("\n"),
-      stdout: stdout.join("\n")
-    }));
+    process.onDidExit(
+      (status) => resolve({
+        status,
+        stderr: stderr.join("\n"),
+        stdout: stdout.join("\n")
+      })
+    );
     process.start();
   });
 }
@@ -65,14 +68,19 @@ function createDebug(namespace) {
   return (...args) => {
     if (!nova.inDevMode())
       return;
-    const humanArgs = args.map((arg) => typeof arg === "object" ? JSON.stringify(arg) : arg);
+    const humanArgs = args.map(
+      (arg) => typeof arg === "object" ? JSON.stringify(arg) : arg
+    );
     console2.info(`${namespace}:`, ...humanArgs);
   };
 }
 function cleanupStorage() {
   return __async(this, null, function* () {
     const debug5 = createDebug("cleanupStorage");
-    const path = nova.path.join(nova.extension.globalStoragePath, "dependencyManagement");
+    const path = nova.path.join(
+      nova.extension.globalStoragePath,
+      "dependencyManagement"
+    );
     if (nova.fs.access(path, nova.fs.F_OK)) {
       debug5(`rm -r ${path}`);
       yield execute("/usr/bin/env", {
@@ -91,7 +99,11 @@ function findBinaryPath(binary) {
 }
 function askChoice(workspace, placeholder, choices) {
   return new Promise((resolve) => {
-    workspace.showChoicePalette(choices, { placeholder }, (choice) => resolve(choice));
+    workspace.showChoicePalette(
+      choices,
+      { placeholder },
+      (choice) => resolve(choice)
+    );
   });
 }
 function logError(message, error) {
@@ -157,12 +169,16 @@ function generateKubeSchemasCommand(workspace) {
     ]);
     if (!extension)
       return;
-    const editor = yield workspace.openFile(nova.path.join(workspace.path, ".nova/Configuration.json"));
+    const editor = yield workspace.openFile(
+      nova.path.join(workspace.path, ".nova/Configuration.json")
+    );
     if (!editor) {
       workspace.showErrorMessage("Could not open .nova/Configuration.json");
       return;
     }
-    const contents = editor.document.getTextInRange(new Range(0, editor.document.length));
+    const contents = editor.document.getTextInRange(
+      new Range(0, editor.document.length)
+    );
     const linesToInsert = getFormattedSchemaLines(extension);
     const editAction = getEditAction(contents, linesToInsert);
     if (editAction) {
@@ -196,7 +212,10 @@ function getEditAction(contents, formattedLines) {
   if (schemasMatch) {
     return (edit) => {
       const newLines = ["", ...formattedLines];
-      const range = new Range(schemasMatch.index, schemasMatch.index + schemasMatch[0].length);
+      const range = new Range(
+        schemasMatch.index,
+        schemasMatch.index + schemasMatch[0].length
+      );
       edit.replace(range, newLines.join("\n"));
     };
   }
@@ -205,7 +224,10 @@ function getEditAction(contents, formattedLines) {
       const newLines = [...formattedLines, "}\n"];
       const prefix = Object.keys(jsonContents).length > 0 ? "," : "";
       newLines.unshift(prefix);
-      const range = new Range(jsonMatch.index, jsonMatch.index + jsonMatch[0].length);
+      const range = new Range(
+        jsonMatch.index,
+        jsonMatch.index + jsonMatch[0].length
+      );
       edit.replace(range, newLines.join("\n"));
     };
   }
@@ -249,13 +271,22 @@ var YamlLanguageServer = class {
         const isInstalled = yield this.installPackages(packageDir);
         if (!isInstalled)
           return;
-        const serverOptions = yield this.getServerOptions(nodePath, packageDir, DEBUG_LOGS ? nova.workspace.path : null);
+        const serverOptions = yield this.getServerOptions(
+          nodePath,
+          packageDir,
+          DEBUG_LOGS ? nova.workspace.path : null
+        );
         const clientOptions = {
           syntaxes: ["yaml"]
         };
         debug3("serverOptions", serverOptions);
         debug3("clientOptions", clientOptions);
-        const client = new LanguageClient("robb-j.yaml", "Yaml Language Server", serverOptions, clientOptions);
+        const client = new LanguageClient(
+          "robb-j.yaml",
+          "Yaml Language Server",
+          serverOptions,
+          clientOptions
+        );
         nova.subscriptions.add(client);
         this.languageClient = client;
         client.onDidStop((err) => {
@@ -315,7 +346,9 @@ var YamlLanguageServer = class {
       msg.actions = [nova.localize("ok"), nova.localize("open-readme")];
       const response = yield nova.notifications.add(msg).catch((error) => logError("Notification failed", error));
       if ((response == null ? void 0 : response.actionIdx) === 1) {
-        nova.openURL("https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements");
+        nova.openURL(
+          "https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements"
+        );
       }
       return null;
     });
@@ -326,7 +359,10 @@ var YamlLanguageServer = class {
   getServerOptions(nodePath, packageDir, debugPath) {
     return __async(this, null, function* () {
       const nodeArgs = ["--unhandled-rejections=warn", "--trace-warnings"];
-      const serverPath = nova.path.join(packageDir, "node_modules/yaml-language-server/out/server/src/server.js");
+      const serverPath = nova.path.join(
+        packageDir,
+        "node_modules/yaml-language-server/out/server/src/server.js"
+      );
       if (DEBUG_INSPECT) {
         nodeArgs.push("--inspect-brk=9231", "--trace-warnings");
       }
@@ -368,5 +404,11 @@ function deactivate() {
 function errorHandler(error) {
   logError("A command failed", error);
 }
-nova.commands.register("robb-j.yaml.restart", (workspace) => restartCommand(workspace, langServer).catch(errorHandler));
-nova.commands.register("robb-j.yaml.generate-kube-schemas", (workspace) => generateKubeSchemasCommand(workspace).catch(errorHandler));
+nova.commands.register(
+  "robb-j.yaml.restart",
+  (workspace) => restartCommand(workspace, langServer).catch(errorHandler)
+);
+nova.commands.register(
+  "robb-j.yaml.generate-kube-schemas",
+  (workspace) => generateKubeSchemasCommand(workspace).catch(errorHandler)
+);

@@ -5,14 +5,13 @@
     "format": "prettier --write '**/*.{js,ts,tsx,json,css,md}'"
   },
   "devDependencies": {
-    "@types/nova-editor-node": "^4.1.4",
+    "@types/nova-editor-node": "^4.1.5",
     "@types/whatwg-fetch": "0.0.33",
-    "esbuild": "^0.14.43",
-    "lint-staged": "^13.0.1",
-    "prettier": "^2.6.2",
-    "ts-jest": "^26.5.6",
-    "typescript": "^4.7.3",
-    "vscode-languageserver-protocol": "^3.17.1",
+    "esbuild": "^0.15.7",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.3",
+    "vscode-languageserver-protocol": "^3.17.2",
     "yorkie": "^2.0.0"
   },
   "sideEffects": false,
