@@ -46,7 +46,6 @@ __export(main_exports, {
 module.exports = __toCommonJS(main_exports);
 
 // src/Scripts/utils.ts
-var console2 = globalThis.console;
 function execute(path, options) {
   return new Promise((resolve) => {
     const process = new Process(path, options);
@@ -71,7 +70,7 @@ function createDebug(namespace) {
     const humanArgs = args.map(
       (arg) => typeof arg === "object" ? JSON.stringify(arg) : arg
     );
-    console2.info(`${namespace}:`, ...humanArgs);
+    console.info(`${namespace}:`, ...humanArgs);
   };
 }
 function cleanupStorage() {
@@ -107,19 +106,19 @@ function askChoice(workspace, placeholder, choices) {
   });
 }
 function logError(message, error) {
-  console2.error(message);
+  console.error(message);
   if (error instanceof Error) {
-    console2.error(error.message);
-    console2.error(error.stack);
+    console.error(error.message);
+    console.error(error.stack);
   } else {
-    console2.error("An non-error was thrown");
-    console2.error(error);
+    console.error("An non-error was thrown");
+    console.error(error);
   }
 }
 
 // src/Scripts/commands/restart-command.ts
 var debug = createDebug("restart");
-function restartCommand(workspace, langServer2) {
+function restartCommand(_workspace, langServer2) {
   return __async(this, null, function* () {
     debug("Restarting");
     if (!langServer2) {
@@ -244,7 +243,7 @@ function parseJson(input) {
 // src/Scripts/yaml-language-server.ts
 var debug3 = createDebug("language-server");
 var DEBUG_INSPECT = nova.inDevMode() && false;
-var DEBUG_LOGS = nova.inDevMode() && false;
+var DEBUG_LOGS = nova.inDevMode() && true;
 var YamlLanguageServer = class {
   constructor() {
     this.languageClient = null;
