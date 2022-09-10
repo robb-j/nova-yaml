@@ -132,7 +132,6 @@ function restartCommand(_workspace, langServer2) {
 
 // src/Scripts/commands/generate-kube-schemas.ts
 var debug2 = createDebug("generate-kube-schemas");
-var K8S_SCHEMA_URL = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json";
 var keywords = [
   "deployment",
   "deploy",
@@ -191,7 +190,7 @@ function getFormattedSchemaLines(extension) {
   const mappedKeywords = keywords.map((k) => `      "*${k}.${extension}"`).join(",\n");
   return [
     '  "yaml.schemas": {',
-    `    "${K8S_SCHEMA_URL}": [`,
+    `    "kubernetes": [`,
     mappedKeywords,
     "    ]",
     "  }"

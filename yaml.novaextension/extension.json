@@ -3,7 +3,7 @@
   "name": "YAML",
   "organization": "robb-j",
   "description": "YAML validation based on JSON schemas, including kubernetes",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "categories": ["completions", "languages", "issues"],
   "license": "MIT",
   "repository": "https://github.com/robb-j/nova-yaml",
