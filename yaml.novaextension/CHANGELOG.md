@@ -1,3 +1,13 @@
+## 1.4.3
+
+**Docs**
+
+- Document advanced configuration
+
+**Fixes**
+
+- Re-add option to toggle document validation
+
 ## 1.4.2
 
 **Fixes**
