@@ -42,6 +42,13 @@
       "description": "Whether to show on-hover toolips or not"
     },
     {
+      "key": "yaml.validate",
+      "title": "Validate",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to validate YAML documents or not"
+    },
+    {
       "key": "yaml.completion",
       "title": "Completions",
       "type": "boolean",
