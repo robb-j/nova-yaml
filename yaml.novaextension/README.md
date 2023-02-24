@@ -7,7 +7,7 @@ and validating against known JSON schemas, including Kubernetes resources.
 
 Yaml Extension requires some additional tools to be installed on your Mac:
 
-- [Node.js 16](https://nodejs.org) and NPM 6 or newer
+- [Node.js 16](https://nodejs.org) and NPM 7 or newer
   - Node.js is used to run [redhat-developer/yaml-language-server](http://github.com/redhat-developer/yaml-language-server)
   - NPM is used to install the server during extension installation
   - Older versions of Node.js and NPM should still work, but newer versions are advised.
