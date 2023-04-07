@@ -159,12 +159,10 @@ export class YamlLanguageServer {
     // });
 
     client.start();
-
-    // client.sendNotification("yaml/registerCustomSchemaRequest");
-
-    // client.sendNotification("workspace/didChangeConfiguration", {
-    //   settings: this.getConfig(),
-    // });
+    
+    // setTimeout(() => {
+    //   client.sendNotification("yaml/registerCustomSchemaRequest");
+    // }, 0)
   }
 
   async getServerOptions(

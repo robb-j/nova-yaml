@@ -1,3 +1,13 @@
+## 1.4.4
+
+**Fixes**
+
+- Use `--omit` rather than `--only` during language server install [#33](https://github.com/robb-j/nova-yaml/pull/33)
+- Upgrade yaml-language-server to `1.11.0` from `1.10.0`,
+  see [yaml-language-server CHANGELOG](https://github.com/redhat-developer/yaml-language-server/blob/main/CHANGELOG.md#1100) for more.
+
+Thanks to [Patrick Fricano](https://github.com/patrickfatrick)!
+
 ## 1.4.3
 
 **Docs**

@@ -310,7 +310,7 @@ var YamlLanguageServer = class {
         return true;
       debug3("#installPackages", installDir);
       const proc = new Process("/usr/bin/env", {
-        args: ["npm", "install", "--no-audit", "--only=production"],
+        args: ["npm", "install", "--no-audit", "--omit=dev"],
         cwd: installDir
       });
       proc.onStdout((line) => debug3("npm install: " + line));
