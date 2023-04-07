@@ -159,7 +159,7 @@ export class YamlLanguageServer {
     // });
 
     client.start();
-    
+
     // setTimeout(() => {
     //   client.sendNotification("yaml/registerCustomSchemaRequest");
     // }, 0)
