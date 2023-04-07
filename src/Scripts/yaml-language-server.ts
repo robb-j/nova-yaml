@@ -99,7 +99,7 @@ export class YamlLanguageServer {
     debug("#installPackages", installDir);
 
     const proc = new Process("/usr/bin/env", {
-      args: ["npm", "install", "--no-audit", "--only=production"],
+      args: ["npm", "install", "--no-audit", "--omit=dev"],
       cwd: installDir,
     });
     proc.onStdout((line) => debug("npm install: " + line));
