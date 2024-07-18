@@ -264,7 +264,7 @@ var YamlLanguageServer = class {
         const packageDir = nova.inDevMode() ? nova.extension.path : nova.extension.globalStoragePath;
         const isInstalled = yield this.installPackages(packageDir);
         if (!isInstalled) return;
-        const serverOptions = yield this.getServerOptions(
+        const serverOptions = this.getServerOptions(
           nodePath,
           packageDir,
           DEBUG_LOGS ? nova.workspace.path : null
@@ -349,37 +349,34 @@ var YamlLanguageServer = class {
   }
   startLanguageServer(client) {
     return __async(this, null, function* () {
-      let some = client.start();
-      debug3("start", some);
+      client.start();
     });
   }
   getServerOptions(nodePath, packageDir, debugPath) {
-    return __async(this, null, function* () {
-      const nodeArgs = ["--unhandled-rejections=warn", "--trace-warnings"];
-      const serverPath = nova.path.join(
-        packageDir,
-        "node_modules/yaml-language-server/out/server/src/server.js"
-      );
-      if (DEBUG_INSPECT) {
-        nodeArgs.push("--inspect-brk=9231", "--trace-warnings");
-      }
-      if (debugPath) {
-        const stdinLog = nova.path.join(debugPath, "stdin.log");
-        const stdoutLog = nova.path.join(debugPath, "stdout.log");
-        const args = nodeArgs.join(" ");
-        const command = `${nodePath} ${args} "${serverPath}" --stdio`;
-        return {
-          type: "stdio",
-          path: "/bin/sh",
-          args: ["-c", `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`]
-        };
-      }
+    const nodeArgs = ["--unhandled-rejections=warn", "--trace-warnings"];
+    const serverPath = nova.path.join(
+      packageDir,
+      "node_modules/yaml-language-server/out/server/src/server.js"
+    );
+    if (DEBUG_INSPECT) {
+      nodeArgs.push("--inspect-brk=9231", "--trace-warnings");
+    }
+    if (debugPath) {
+      const stdinLog = nova.path.join(debugPath, "stdin.log");
+      const stdoutLog = nova.path.join(debugPath, "stdout.log");
+      const args = nodeArgs.join(" ");
+      const command = `${nodePath} ${args} "${serverPath}" --stdio`;
       return {
         type: "stdio",
-        path: nodePath,
-        args: [...nodeArgs, serverPath, "--stdio"]
+        path: "/bin/sh",
+        args: ["-c", `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`]
       };
-    });
+    }
+    return {
+      type: "stdio",
+      path: nodePath,
+      args: [...nodeArgs, serverPath, "--stdio"]
+    };
   }
 };
 
