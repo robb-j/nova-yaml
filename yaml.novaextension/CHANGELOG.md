@@ -1,3 +1,7 @@
+## 1.4.6
+
+- Remove debug logs slowing down the extension
+
 ## 1.4.5
 
 - Upgrade yaml-language-server to `1.15.0` from `1.11.0`,

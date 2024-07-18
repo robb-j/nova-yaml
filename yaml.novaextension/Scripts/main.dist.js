@@ -270,8 +270,7 @@ var YamlLanguageServer = class {
           DEBUG_LOGS ? nova.workspace.path : null
         );
         const clientOptions = {
-          syntaxes: ["yaml"],
-          debug: true
+          syntaxes: ["yaml"]
         };
         debug3("serverOptions", serverOptions);
         debug3("clientOptions", clientOptions);

@@ -53,7 +53,6 @@ export class YamlLanguageServer {
       );
       const clientOptions = {
         syntaxes: ["yaml"],
-        debug: true,
       };
 
       debug("serverOptions", serverOptions);
