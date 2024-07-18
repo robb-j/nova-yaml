@@ -53,7 +53,7 @@ export class YamlLanguageServer {
       );
       const clientOptions = {
         syntaxes: ["yaml"],
-        debug: true
+        debug: true,
       };
 
       debug("serverOptions", serverOptions);
@@ -155,9 +155,9 @@ export class YamlLanguageServer {
 
   async startLanguageServer(client: LanguageClient) {
     client.start();
-    
+
     // await new Promise(r => setTimeout(r, 2_000))
-    
+
     // client.sendNotification("yaml/registerCustomSchemaRequest");
 
     // client.onRequest("custom/schema/request", (file) => {
@@ -169,11 +169,11 @@ export class YamlLanguageServer {
     //   debug("yaml/get/jsonSchema", file);
     //   return [];
     // });
-    // 
+    //
     // client.onNotification('yaml/schema/store/initialized', () => {
     //   debug('yaml/schema/store/initialized')
     // })
-    // 
+    //
     // client.sendNotification("yaml/supportSchemaSelection");
   }
 
