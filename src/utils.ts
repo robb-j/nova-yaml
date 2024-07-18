@@ -13,7 +13,7 @@ export type ProcessOutput = { stdout: string; stderr: string; status: number };
  */
 export function execute(
   path: ProcessParams[0],
-  options: ProcessParams[1]
+  options: ProcessParams[1],
 ): Promise<ProcessOutput> {
   return new Promise<ProcessOutput>((resolve) => {
     const process = new Process(path, options);
@@ -33,7 +33,7 @@ export function execute(
         status,
         stderr: stderr.join("\n"),
         stdout: stdout.join("\n"),
-      })
+      }),
     );
 
     // Start the process
@@ -45,7 +45,7 @@ export function copyToExtensionStorage(filename: string) {
   const source = nova.path.join(nova.extension.path, filename);
   const destination = nova.path.join(
     nova.extension.globalStoragePath,
-    filename
+    filename,
   );
 
   if (nova.fs.access(destination, nova.fs.constants.F_OK)) {
@@ -67,7 +67,7 @@ export function createDebug(namespace: string) {
     if (!nova.inDevMode()) return;
 
     const humanArgs = args.map((arg) =>
-      typeof arg === "object" ? JSON.stringify(arg) : arg
+      typeof arg === "object" ? JSON.stringify(arg) : arg,
     );
     console.info(`${namespace}:`, ...humanArgs);
   };
@@ -81,7 +81,7 @@ export async function cleanupStorage() {
 
   const path = nova.path.join(
     nova.extension.globalStoragePath,
-    "dependencyManagement"
+    "dependencyManagement",
   );
 
   if (nova.fs.access(path, nova.fs.F_OK)) {
@@ -108,11 +108,11 @@ export async function findBinaryPath(binary: string): Promise<string | null> {
 export function askChoice(
   workspace: Workspace,
   placeholder: string | undefined,
-  choices: string[]
+  choices: string[],
 ) {
   return new Promise<string | null>((resolve) => {
     workspace.showChoicePalette(choices, { placeholder }, (choice) =>
-      resolve(choice)
+      resolve(choice),
     );
   });
 }

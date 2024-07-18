@@ -2,21 +2,18 @@
   "name": "nova-yaml",
   "private": true,
   "scripts": {
-    "format": "prettier --write '**/*.{js,ts,tsx,json,css,md}'"
+    "format": "prettier --write '**/*.{js,ts,tsx,json,css,md}'",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@types/nova-editor-node": "^4.1.5",
+    "@types/nova-editor-node": "^5.1.4",
     "@types/whatwg-fetch": "0.0.33",
-    "esbuild": "^0.15.7",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
-    "typescript": "^4.8.3",
-    "vscode-languageserver-protocol": "^3.17.2",
-    "yorkie": "^2.0.0"
-  },
-  "sideEffects": false,
-  "gitHooks": {
-    "pre-commit": "lint-staged"
+    "esbuild": "^0.23.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.3",
+    "vscode-languageserver-protocol": "^3.17.5"
   },
   "lint-staged": {
     "*.{js,ts,tsx,json,css,md}": [

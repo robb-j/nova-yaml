@@ -18,7 +18,7 @@ npx esbuild \
   --target=es6 \
   --platform=neutral \
   --outfile=yaml.novaextension/Scripts/main.dist.js \
-  src/Scripts/main.ts
+  src/main.ts
 
 # 
 # Try to bundle the YAML into a binary, this fails:

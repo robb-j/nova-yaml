@@ -24,7 +24,7 @@ export async function generateKubeSchemasCommand(workspace: Workspace) {
 
   // Open the Configuration.json in a Nova editor, to be programatically edited
   const editor = await workspace.openFile(
-    nova.path.join(workspace.path, ".nova/Configuration.json")
+    nova.path.join(workspace.path, ".nova/Configuration.json"),
   );
 
   if (!editor) {
@@ -34,7 +34,7 @@ export async function generateKubeSchemasCommand(workspace: Workspace) {
 
   // Read in the user's existing configuration
   const contents = editor.document.getTextInRange(
-    new Range(0, editor.document.length)
+    new Range(0, editor.document.length),
   );
 
   const linesToInsert = getFormattedSchemaLines(extension);
@@ -69,7 +69,7 @@ interface EditAction {
 
 function getEditAction(
   contents: string,
-  formattedLines: string[]
+  formattedLines: string[],
 ): EditAction | null {
   // Work out if the file contains JSON and/or an existing yaml.schemas definition
   const jsonMatch = /\s*?}\s*?$/.exec(contents);
@@ -96,7 +96,7 @@ function getEditAction(
       const newLines = ["", ...formattedLines];
       const range = new Range(
         schemasMatch.index,
-        schemasMatch.index + schemasMatch[0].length
+        schemasMatch.index + schemasMatch[0].length,
       );
       edit.replace(range, newLines.join("\n"));
     };
@@ -116,7 +116,7 @@ function getEditAction(
 
       const range = new Range(
         jsonMatch.index,
-        jsonMatch.index + jsonMatch[0].length
+        jsonMatch.index + jsonMatch[0].length,
       );
       edit.replace(range, newLines.join("\n"));
     };

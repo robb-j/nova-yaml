@@ -31,11 +31,11 @@ function errorHandler(error: Error) {
 }
 
 nova.commands.register("robb-j.yaml.restart", (workspace: Workspace) =>
-  restartCommand(workspace, langServer).catch(errorHandler)
+  restartCommand(workspace, langServer).catch(errorHandler),
 );
 
 nova.commands.register(
   "robb-j.yaml.generate-kube-schemas",
   (workspace: Workspace) =>
-    generateKubeSchemasCommand(workspace).catch(errorHandler)
+    generateKubeSchemasCommand(workspace).catch(errorHandler),
 );

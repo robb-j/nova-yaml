@@ -5,7 +5,7 @@ const debug = createDebug("restart");
 
 export async function restartCommand(
   _workspace: Workspace,
-  langServer: YamlLanguageServer | null
+  langServer: YamlLanguageServer | null,
 ) {
   debug("Restarting");
 

@@ -46,13 +46,14 @@ export class YamlLanguageServer {
       const isInstalled = await this.installPackages(packageDir);
       if (!isInstalled) return;
 
-      const serverOptions = await this.getServerOptions(
+      const serverOptions = this.getServerOptions(
         nodePath,
         packageDir,
-        DEBUG_LOGS ? nova.workspace.path : null
+        DEBUG_LOGS ? nova.workspace.path : null,
       );
-      const clientOptions: ClientOptions = {
+      const clientOptions = {
         syntaxes: ["yaml"],
+        debug: true
       };
 
       debug("serverOptions", serverOptions);
@@ -62,7 +63,7 @@ export class YamlLanguageServer {
         "robb-j.yaml",
         "Yaml Language Server",
         serverOptions,
-        clientOptions
+        clientOptions,
       );
 
       nova.subscriptions.add(client as any);
@@ -145,36 +146,47 @@ export class YamlLanguageServer {
 
     if (response?.actionIdx === 1) {
       nova.openURL(
-        "https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements"
+        "https://github.com/robb-j/nova-yaml/tree/main/yaml.novaextension#requirements",
       );
     }
 
     return null;
   }
 
-  startLanguageServer(client: LanguageClient) {
+  async startLanguageServer(client: LanguageClient) {
+    client.start();
+    
+    // await new Promise(r => setTimeout(r, 2_000))
+    
+    // client.sendNotification("yaml/registerCustomSchemaRequest");
+
     // client.onRequest("custom/schema/request", (file) => {
     //   debug("custom/schema/request", file);
-    //   return [];
+    //   return ["kubernetes"];
     // });
 
-    client.start();
-
-    // setTimeout(() => {
-    //   client.sendNotification("yaml/registerCustomSchemaRequest");
-    // }, 0)
+    // client.onRequest("yaml/get/jsonSchema", (file) => {
+    //   debug("yaml/get/jsonSchema", file);
+    //   return [];
+    // });
+    // 
+    // client.onNotification('yaml/schema/store/initialized', () => {
+    //   debug('yaml/schema/store/initialized')
+    // })
+    // 
+    // client.sendNotification("yaml/supportSchemaSelection");
   }
 
-  async getServerOptions(
+  getServerOptions(
     nodePath: string,
     packageDir: string,
-    debugPath: string | null
-  ): Promise<ServerOptions> {
+    debugPath: string | null,
+  ): ServerOptions {
     const nodeArgs = ["--unhandled-rejections=warn", "--trace-warnings"];
 
     const serverPath = nova.path.join(
       packageDir,
-      "node_modules/yaml-language-server/out/server/src/server.js"
+      "node_modules/yaml-language-server/out/server/src/server.js",
     );
 
     if (DEBUG_INSPECT) {

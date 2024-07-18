@@ -1,3 +1,8 @@
+## 1.4.5
+
+- Upgrade yaml-language-server to `1.15.0` from `1.11.0`,
+  see [yaml-language-server CHANGELOG](https://github.com/redhat-developer/yaml-language-server/blob/main/CHANGELOG.md#1100) for more.
+
 ## 1.4.4
 
 **Fixes**

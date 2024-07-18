@@ -37,7 +37,7 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 
-// src/Scripts/main.ts
+// src/main.ts
 var main_exports = {};
 __export(main_exports, {
   activate: () => activate,
@@ -45,7 +45,7 @@ __export(main_exports, {
 });
 module.exports = __toCommonJS(main_exports);
 
-// src/Scripts/utils.ts
+// src/utils.ts
 function execute(path, options) {
   return new Promise((resolve) => {
     const process = new Process(path, options);
@@ -65,8 +65,7 @@ function execute(path, options) {
 }
 function createDebug(namespace) {
   return (...args) => {
-    if (!nova.inDevMode())
-      return;
+    if (!nova.inDevMode()) return;
     const humanArgs = args.map(
       (arg) => typeof arg === "object" ? JSON.stringify(arg) : arg
     );
@@ -116,7 +115,7 @@ function logError(message, error) {
   }
 }
 
-// src/Scripts/commands/restart-command.ts
+// src/commands/restart-command.ts
 var debug = createDebug("restart");
 function restartCommand(_workspace, langServer2) {
   return __async(this, null, function* () {
@@ -130,7 +129,7 @@ function restartCommand(_workspace, langServer2) {
   });
 }
 
-// src/Scripts/commands/generate-kube-schemas.ts
+// src/commands/generate-kube-schemas.ts
 var debug2 = createDebug("generate-kube-schemas");
 var keywords = [
   "deployment",
@@ -158,15 +157,13 @@ var keywords = [
 ];
 function generateKubeSchemasCommand(workspace) {
   return __async(this, null, function* () {
-    if (!workspace.path)
-      return;
+    if (!workspace.path) return;
     debug2("Generating");
     const extension = yield askChoice(workspace, "Pick an extension", [
       "yaml",
       "yml"
     ]);
-    if (!extension)
-      return;
+    if (!extension) return;
     const editor = yield workspace.openFile(
       nova.path.join(workspace.path, ".nova/Configuration.json")
     );
@@ -239,7 +236,7 @@ function parseJson(input) {
   }
 }
 
-// src/Scripts/yaml-language-server.ts
+// src/yaml-language-server.ts
 var debug3 = createDebug("language-server");
 var DEBUG_INSPECT = nova.inDevMode() && false;
 var DEBUG_LOGS = nova.inDevMode() && false;
@@ -258,8 +255,7 @@ var YamlLanguageServer = class {
       try {
         debug3("#start");
         const nodePath = yield this.getNodeJsPath();
-        if (!nodePath)
-          return;
+        if (!nodePath) return;
         if (this.languageClient) {
           this.languageClient.stop();
           nova.subscriptions.remove(this.languageClient);
@@ -267,15 +263,15 @@ var YamlLanguageServer = class {
         }
         const packageDir = nova.inDevMode() ? nova.extension.path : nova.extension.globalStoragePath;
         const isInstalled = yield this.installPackages(packageDir);
-        if (!isInstalled)
-          return;
+        if (!isInstalled) return;
         const serverOptions = yield this.getServerOptions(
           nodePath,
           packageDir,
           DEBUG_LOGS ? nova.workspace.path : null
         );
         const clientOptions = {
-          syntaxes: ["yaml"]
+          syntaxes: ["yaml"],
+          debug: true
         };
         debug3("serverOptions", serverOptions);
         debug3("clientOptions", clientOptions);
@@ -304,10 +300,12 @@ var YamlLanguageServer = class {
       this.languageClient = null;
     }
   }
+  //
+  // Internal
+  //
   installPackages(installDir) {
     return __async(this, null, function* () {
-      if (nova.inDevMode())
-        return true;
+      if (nova.inDevMode()) return true;
       debug3("#installPackages", installDir);
       const proc = new Process("/usr/bin/env", {
         args: ["npm", "install", "--no-audit", "--omit=dev"],
@@ -319,8 +317,7 @@ var YamlLanguageServer = class {
       const success = yield new Promise((resolve) => {
         proc.onDidExit((status) => resolve(status === 0));
       });
-      if (success)
-        return true;
+      if (success) return true;
       const msg = new NotificationRequest("npm-install-failed");
       msg.title = nova.localize("npm-install-failed-title");
       msg.body = nova.localize("npm-install-failed-body");
@@ -336,8 +333,7 @@ var YamlLanguageServer = class {
     return __async(this, null, function* () {
       const nodePath = yield findBinaryPath("node");
       debug3("nodePath", nodePath);
-      if (nodePath)
-        return nodePath;
+      if (nodePath) return nodePath;
       const msg = new NotificationRequest("node-js-not-found");
       msg.title = nova.localize("node-not-found-title");
       msg.body = nova.localize("node-not-found-body");
@@ -352,7 +348,10 @@ var YamlLanguageServer = class {
     });
   }
   startLanguageServer(client) {
-    client.start();
+    return __async(this, null, function* () {
+      let some = client.start();
+      debug3("start", some);
+    });
   }
   getServerOptions(nodePath, packageDir, debugPath) {
     return __async(this, null, function* () {
@@ -384,7 +383,7 @@ var YamlLanguageServer = class {
   }
 };
 
-// src/Scripts/main.ts
+// src/main.ts
 var debug4 = createDebug("main");
 var langServer = null;
 function activate() {
