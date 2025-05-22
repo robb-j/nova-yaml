@@ -239,7 +239,6 @@ function parseJson(input) {
 // src/yaml-language-server.ts
 var debug3 = createDebug("language-server");
 var DEBUG_INSPECT = nova.inDevMode() && false;
-var DEBUG_LOGS = nova.inDevMode() && false;
 var YamlLanguageServer = class {
   constructor() {
     this.languageClient = null;
@@ -264,13 +263,10 @@ var YamlLanguageServer = class {
         const packageDir = nova.inDevMode() ? nova.extension.path : nova.extension.globalStoragePath;
         const isInstalled = yield this.installPackages(packageDir);
         if (!isInstalled) return;
-        const serverOptions = this.getServerOptions(
-          nodePath,
-          packageDir,
-          DEBUG_LOGS ? nova.workspace.path : null
-        );
+        const serverOptions = this.getServerOptions(nodePath, packageDir);
         const clientOptions = {
-          syntaxes: ["yaml"]
+          syntaxes: ["yaml"],
+          debug: true
         };
         debug3("serverOptions", serverOptions);
         debug3("clientOptions", clientOptions);
@@ -285,7 +281,7 @@ var YamlLanguageServer = class {
         client.onDidStop((err) => {
           debug3("client.onDidStop", err == null ? void 0 : err.message);
         });
-        this.startLanguageServer(client);
+        yield this.startLanguageServer(client);
       } catch (error) {
         logError("LanguageServer Failed", error);
       }
@@ -349,33 +345,22 @@ var YamlLanguageServer = class {
   startLanguageServer(client) {
     return __async(this, null, function* () {
       client.start();
+      yield new Promise((r) => setTimeout(r, 2e3));
     });
   }
-  getServerOptions(nodePath, packageDir, debugPath) {
-    const nodeArgs = ["--unhandled-rejections=warn", "--trace-warnings"];
-    const serverPath = nova.path.join(
-      packageDir,
-      "node_modules/yaml-language-server/out/server/src/server.js"
-    );
+  getServerOptions(nodePath, packageDir) {
+    const args = ["--unhandled-rejections=warn", "--trace-warnings"];
     if (DEBUG_INSPECT) {
-      nodeArgs.push("--inspect-brk=9231", "--trace-warnings");
+      args.push("--inspect-brk=9231");
     }
-    if (debugPath) {
-      const stdinLog = nova.path.join(debugPath, "stdin.log");
-      const stdoutLog = nova.path.join(debugPath, "stdout.log");
-      const args = nodeArgs.join(" ");
-      const command = `${nodePath} ${args} "${serverPath}" --stdio`;
-      return {
-        type: "stdio",
-        path: "/bin/sh",
-        args: ["-c", `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`]
-      };
-    }
-    return {
-      type: "stdio",
-      path: nodePath,
-      args: [...nodeArgs, serverPath, "--stdio"]
-    };
+    args.push(
+      nova.path.join(
+        packageDir,
+        "node_modules/yaml-language-server/out/server/src/server.js"
+      ),
+      "--stdio"
+    );
+    return { type: "stdio", path: nodePath, args };
   }
 };
 

@@ -8,9 +8,6 @@ const debug = createDebug("language-server");
 // Start the server with --inspect-brk
 const DEBUG_INSPECT = nova.inDevMode() && false;
 
-// Log stdin and stdout of the server to local files
-const DEBUG_LOGS = nova.inDevMode() && false;
-
 export class YamlLanguageServer {
   languageClient: LanguageClient | null = null;
 
@@ -46,13 +43,10 @@ export class YamlLanguageServer {
       const isInstalled = await this.installPackages(packageDir);
       if (!isInstalled) return;
 
-      const serverOptions = this.getServerOptions(
-        nodePath,
-        packageDir,
-        DEBUG_LOGS ? nova.workspace.path : null,
-      );
+      const serverOptions = this.getServerOptions(nodePath, packageDir);
       const clientOptions = {
         syntaxes: ["yaml"],
+        debug: true,
       };
 
       debug("serverOptions", serverOptions);
@@ -72,7 +66,7 @@ export class YamlLanguageServer {
         debug("client.onDidStop", err?.message);
       });
 
-      this.startLanguageServer(client);
+      await this.startLanguageServer(client);
     } catch (error) {
       logError("LanguageServer Failed", error);
     }
@@ -155,61 +149,33 @@ export class YamlLanguageServer {
   async startLanguageServer(client: LanguageClient) {
     client.start();
 
-    // await new Promise(r => setTimeout(r, 2_000))
+    await new Promise((r) => setTimeout(r, 2_000));
+
+    // NOTE: nova doesn't send this reply
+
+    // client.onRequest("custom/schema/request", (param) => {
+    //   debug("custom/schema/request", JSON.stringify(param));
+    //   return Promise.resolve([{ url: "kubernetes", name: "Kubernetes" }]);
+    // });
 
     // client.sendNotification("yaml/registerCustomSchemaRequest");
-
-    // client.onRequest("custom/schema/request", (file) => {
-    //   debug("custom/schema/request", file);
-    //   return ["kubernetes"];
-    // });
-
-    // client.onRequest("yaml/get/jsonSchema", (file) => {
-    //   debug("yaml/get/jsonSchema", file);
-    //   return [];
-    // });
-    //
-    // client.onNotification('yaml/schema/store/initialized', () => {
-    //   debug('yaml/schema/store/initialized')
-    // })
-    //
-    // client.sendNotification("yaml/supportSchemaSelection");
   }
 
-  getServerOptions(
-    nodePath: string,
-    packageDir: string,
-    debugPath: string | null,
-  ): ServerOptions {
-    const nodeArgs = ["--unhandled-rejections=warn", "--trace-warnings"];
-
-    const serverPath = nova.path.join(
-      packageDir,
-      "node_modules/yaml-language-server/out/server/src/server.js",
-    );
+  getServerOptions(nodePath: string, packageDir: string): ServerOptions {
+    const args = ["--unhandled-rejections=warn", "--trace-warnings"];
 
     if (DEBUG_INSPECT) {
-      nodeArgs.push("--inspect-brk=9231", "--trace-warnings");
+      args.push("--inspect-brk=9231");
     }
 
-    if (debugPath) {
-      const stdinLog = nova.path.join(debugPath, "stdin.log");
-      const stdoutLog = nova.path.join(debugPath, "stdout.log");
+    args.push(
+      nova.path.join(
+        packageDir,
+        "node_modules/yaml-language-server/out/server/src/server.js",
+      ),
+      "--stdio",
+    );
 
-      const args = nodeArgs.join(" ");
-      const command = `${nodePath} ${args} "${serverPath}" --stdio`;
-
-      return {
-        type: "stdio",
-        path: "/bin/sh",
-        args: ["-c", `tee "${stdinLog}" | ${command} | tee "${stdoutLog}"`],
-      };
-    }
-
-    return {
-      type: "stdio",
-      path: nodePath,
-      args: [...nodeArgs, serverPath, "--stdio"],
-    };
+    return { type: "stdio", path: nodePath, args };
   }
 }

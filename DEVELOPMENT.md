@@ -58,7 +58,6 @@ or specific lines after a `// prettier-ignore` comment.
 - Ensure git is clean
 - Ensure the `CHANGELOG.md` is up-to-date
 - Generate new screenshots if needed
-- Make sure `DEBUG_LOGS` is `false`
 - Run the build
 - Bump the version in extension.json
 - Commit as `X.Y.Z`

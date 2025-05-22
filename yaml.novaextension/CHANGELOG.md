@@ -1,3 +1,8 @@
+## 1.5.0
+
+- Upgrade yaml-language-server from `1.15.0` to `1.18.0`,
+  see [yaml-language-server CHANGELOG](https://github.com/redhat-developer/yaml-language-server/blob/main/CHANGELOG.md#1100) for more.
+
 ## 1.4.6
 
 - Remove debug logs slowing down the extension
