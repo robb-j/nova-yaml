@@ -8,6 +8,9 @@ const debug = createDebug("language-server");
 // Start the server with --inspect-brk
 const DEBUG_INSPECT = nova.inDevMode() && false;
 
+// Enable LSP logs
+const DEBUG_LOGS = nova.inDevMode() && false;
+
 export class YamlLanguageServer {
   languageClient: LanguageClient | null = null;
 
@@ -46,7 +49,7 @@ export class YamlLanguageServer {
       const serverOptions = this.getServerOptions(nodePath, packageDir);
       const clientOptions = {
         syntaxes: ["yaml"],
-        debug: true,
+        debug: DEBUG_LOGS,
       };
 
       debug("serverOptions", serverOptions);

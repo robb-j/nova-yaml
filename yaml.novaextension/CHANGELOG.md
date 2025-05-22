@@ -1,3 +1,7 @@
+## 1.5.1
+
+- Remove debug logs
+
 ## 1.5.0
 
 - Upgrade yaml-language-server from `1.15.0` to `1.18.0`,
